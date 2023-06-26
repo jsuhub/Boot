@@ -1,0 +1,11 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: shuhao201028
+    url: jdbc:mysql://localhost:3306/db_computer_communication
+
+mybatis-plus:
+  global-config:
+    db-config:
+      table-prefix: tb_

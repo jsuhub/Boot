@@ -53,8 +53,8 @@ public class ArticleController {
     ResponseVO<List<Article>> listArticle() {
         List<Article> articleList = articleService.list();
         return articleList != null
-                ? new ResponseVO<List<Article>>(Status.SUCCESS, "get a user", articleList)
-                : new ResponseVO<List<Article>>(Status.ERROR, "get a user", articleList);
+                ? new ResponseVO<List<Article>>(Status.SUCCESS, "list a user", articleList)
+                : new ResponseVO<List<Article>>(Status.ERROR, "list a user", articleList);
     }
 
 }

@@ -1,7 +1,11 @@
 package com.example.boot.controller;
 
 import com.example.boot.pojo.entity.Article;
+import com.example.boot.pojo.vo.RequestVO;
 import com.example.boot.pojo.vo.ResponseVO;
+import com.example.boot.constant.Status;
+import com.example.boot.service.impl.ArticleServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -10,34 +14,47 @@ import java.util.List;
 @RequestMapping("/articles")
 public class ArticleController {
 
+    @Autowired
+    private ArticleServiceImpl articleService;
+
     @PostMapping
-    ResponseVO<Boolean> saveArticle () {
-        return null;
+    ResponseVO<Boolean> saveArticle(@RequestBody RequestVO<Article> articleRequestVO) {
+        boolean save = articleService.save(articleRequestVO.getData());
+        return save
+                ? new ResponseVO<Boolean>(Status.SUCCESS, "save ok", save)
+                : new ResponseVO<Boolean>(Status.ERROR, "save error", save);
     }
 
-    @DeleteMapping
-    ResponseVO<Boolean> removeArticleById () {
-        return null;
+    @DeleteMapping("/{id}")
+    ResponseVO<Boolean> removeArticleById(int id) {
+        boolean remove = articleService.removeById(id);
+        return remove
+                ? new ResponseVO<Boolean>(Status.SUCCESS, "remove ok", remove)
+                : new ResponseVO<Boolean>(Status.ERROR, "remove ok", remove);
     }
 
     @PutMapping
-    Boolean updateArticle () {
-        return null;
+    ResponseVO<Boolean> updateArticle(@RequestBody RequestVO<Article> articleRequestVO) {
+        boolean update = articleService.updateById(articleRequestVO.getData());
+        return update
+                ? new ResponseVO<Boolean>(Status.SUCCESS, "update ok", update)
+                : new ResponseVO<Boolean>(Status.ERROR, "update ok", update);
     }
 
     @GetMapping("/{id}")
-    ResponseVO<Article> getArticleById (@PathVariable int id) {
-        return null;
+    ResponseVO<Article> getArticleById(@PathVariable int id) {
+        Article article = articleService.getById(id);
+        return article != null
+                ? new ResponseVO<Article>(Status.SUCCESS, "get a user", article)
+                : new ResponseVO<Article>(Status.ERROR, "get a user", article);
     }
 
     @GetMapping("/list")
-    List<Article> listArticle () {
-        return null;
-    }
-
-    @GetMapping("/test")
-    ResponseVO<String> test() {
-        return null;
+    ResponseVO<List<Article>> listArticle() {
+        List<Article> articleList = articleService.list();
+        return articleList != null
+                ? new ResponseVO<List<Article>>(Status.SUCCESS, "get a user", articleList)
+                : new ResponseVO<List<Article>>(Status.ERROR, "get a user", articleList);
     }
 
 }

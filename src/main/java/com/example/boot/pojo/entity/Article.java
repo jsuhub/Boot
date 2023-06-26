@@ -1,14 +1,13 @@
 package com.example.boot.pojo.entity;
 
+import lombok.Data;
+
+@Data
 public class Article {
 
-    String name;
+    Integer id;
 
-    public String getName() {
-        return name;
-    }
+    String title;
 
-    public void setName(String name) {
-        this.name = name;
-    }
+    String author;
 }

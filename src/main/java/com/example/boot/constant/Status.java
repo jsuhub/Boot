@@ -1,4 +1,4 @@
-package com.example.boot.pojo.vo;
+package com.example.boot.constant;
 
 public class Status {
     public static final int SUCCESS = 200;

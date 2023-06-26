@@ -1,8 +1,6 @@
 package com.example.boot.controller;
 
 import com.example.boot.pojo.entity.Article;
-import com.example.boot.pojo.vo.Status;
-import com.example.boot.pojo.vo.StatusInfo;
 import com.example.boot.pojo.vo.ResponseVO;
 import org.springframework.web.bind.annotation.*;
 

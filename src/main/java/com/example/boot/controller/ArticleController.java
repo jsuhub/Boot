@@ -18,9 +18,14 @@ public class ArticleController {
     private ArticleServiceImpl articleService;
 
     @PostMapping
+<<<<<<< HEAD
+    ResponseVO<Boolean> saveArticle(@RequestBody RequestVO<Article> articleRequestVO) { //前端发过来的数据转换成RequestVO<Article>类的对象
+        boolean save = articleService.save(articleRequestVO.getData()); //articleRequestVO.getData() 取出前端发来的data数据
+=======
     ResponseVO<Boolean> saveArticle(@RequestBody RequestVO<Article> articleRequestVO) {
         System.out.println(articleRequestVO.getData());
         boolean save = articleService.save(articleRequestVO.getData());
+>>>>>>> main
         return save
                 ? new ResponseVO<Boolean>(Status.SUCCESS, "save ok", save)
                 : new ResponseVO<Boolean>(Status.ERROR, "save error", save);

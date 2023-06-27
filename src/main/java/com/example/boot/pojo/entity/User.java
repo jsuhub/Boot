@@ -1,5 +1,6 @@
 package com.example.boot.pojo.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 @Data
@@ -8,22 +9,25 @@ public class User {
 
     String username;
     Integer id;
+
+    @JsonProperty("passwd")
     String password;
     String email;
     String tel;
     String sex;
-    String image;
+    String avatar;
+
 
     @Override
     public String toString() {
         return "User{" +
-                "userName='" + username + '\'' +
+                "username='" + username + '\'' +
                 ", id=" + id +
                 ", password='" + password + '\'' +
-                ", e_main='" + email + '\'' +
+                ", email='" + email + '\'' +
                 ", tel='" + tel + '\'' +
                 ", sex='" + sex + '\'' +
-                ", image='" + image + '\'' +
+                ", avatar='" + avatar + '\'' +
                 '}';
     }
 }

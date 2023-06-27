@@ -11,7 +11,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/user")
+@CrossOrigin
+@RequestMapping("/users")
 public class UserController {
 
     @Autowired
@@ -60,5 +61,25 @@ public class UserController {
                 : new ResponseVO<List<User>>(Status.ERROR, "list a user", usersleList);
     }
 
+    @PostMapping("/login")
+    ResponseVO<Boolean> login(@RequestBody RequestVO<User> userRequestVO) {
+        User user = userRequestVO.getData();
+        System.out.println(user);
+        String username = user.getUsername();
+        String password = user.getPassword();
+        Boolean userByUsername = userService.getUserByUsername(username, password);
+        return userByUsername
+                ? new ResponseVO<>(Status.SUCCESS, "login success", userByUsername)
+                : new ResponseVO<>(Status.ERROR, "login failed", userByUsername);
+    }
+
+    @PostMapping("/register")
+    ResponseVO<Boolean> register(@RequestBody RequestVO<User> userRequestVO) {
+        User user = userRequestVO.getData();
+        Boolean usernameByUsername = userService.getUsernameByUsername(user);
+        return usernameByUsername
+                ? new ResponseVO<>(Status.SUCCESS, "register ok", usernameByUsername)
+                : new ResponseVO<>(Status.ERROR, "register failed", usernameByUsername);
+    }
 }
 

@@ -11,4 +11,22 @@ import org.springframework.stereotype.Service;
 public class UserServicelmpl extends ServiceImpl<UserMapper, User> implements IUserService {
     @Autowired
     private UserMapper userMapper;
+
+    @Override
+    public Boolean getUserByUsername(String username, String passwd) {
+        String dbPasswd = userMapper.selectUserPasswdByUsername(username);
+
+        if (passwd.equals(dbPasswd)) {
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public Boolean getUsernameByUsername(User user) {
+
+        return userMapper.selectUsernameByUsername(user.getUsername()) == null
+                ? userMapper.insert(user) == 1
+                : false;
+    }
 }

@@ -1,4 +1,3 @@
-# apply
 spring:
   profiles:
     active: pro
@@ -12,7 +11,7 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
-    password: shuhao201028
+    password: 123123
     url: jdbc:mysql://localhost:3306/db_computer_communication
 
 server:
@@ -46,4 +45,5 @@ mybatis-plus:
     db-config:
       table-prefix: tb_
   configuration:
-    map-underscore-to-camel-case: true
+   map-underscore-to-camel-case: true
+

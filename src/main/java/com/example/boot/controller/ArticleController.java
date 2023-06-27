@@ -19,6 +19,7 @@ public class ArticleController {
 
     @PostMapping
     ResponseVO<Boolean> saveArticle(@RequestBody RequestVO<Article> articleRequestVO) {
+        System.out.println(articleRequestVO.getData());
         boolean save = articleService.save(articleRequestVO.getData());
         return save
                 ? new ResponseVO<Boolean>(Status.SUCCESS, "save ok", save)
@@ -26,7 +27,7 @@ public class ArticleController {
     }
 
     @DeleteMapping("/{id}")
-    ResponseVO<Boolean> removeArticleById(int id) {
+    ResponseVO<Boolean> removeArticleById(@PathVariable int id) {
         boolean remove = articleService.removeById(id);
         return remove
                 ? new ResponseVO<Boolean>(Status.SUCCESS, "remove ok", remove)
@@ -38,7 +39,7 @@ public class ArticleController {
         boolean update = articleService.updateById(articleRequestVO.getData());
         return update
                 ? new ResponseVO<Boolean>(Status.SUCCESS, "update ok", update)
-                : new ResponseVO<Boolean>(Status.ERROR, "update ok", update);
+                : new ResponseVO<Boolean>(Status.ERROR, "update error", update);
     }
 
     @GetMapping("/{id}")

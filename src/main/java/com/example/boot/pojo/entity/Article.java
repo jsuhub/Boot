@@ -1,5 +1,6 @@
 package com.example.boot.pojo.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 @Data
@@ -10,4 +11,7 @@ public class Article {
     String title;
 
     String author;
+
+    @JsonProperty("like_amount")
+    Integer likeAmount;
 }

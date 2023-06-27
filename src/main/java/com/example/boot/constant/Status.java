@@ -7,7 +7,6 @@ public class Status {
 
     public static final int NOTFOUND = 404;
 
-
 }
 
 

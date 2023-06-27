@@ -32,4 +32,11 @@ public class TestUserMapper {
         System.out.println(insert);
     }
 
+    @Test
+    void test() {
+        User user = new User();
+        user.setUsername("s1111111");
+        User user1 = userMapper.selectById(1);
+    }
+
 }

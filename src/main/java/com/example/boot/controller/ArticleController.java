@@ -26,7 +26,7 @@ public class ArticleController {
     }
 
     @DeleteMapping("/{id}")
-    ResponseVO<Boolean> removeArticleById(int id) {
+    ResponseVO<Boolean> removeArticleById(@PathVariable  int id) {
         boolean remove = articleService.removeById(id);
         return remove
                 ? new ResponseVO<Boolean>(Status.SUCCESS, "remove ok", remove)

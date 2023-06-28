@@ -23,6 +23,7 @@ mybatis-plus:
       table-prefix: tb_
   configuration:
     map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 ---
 # environment production
 spring:
@@ -45,3 +46,5 @@ mybatis-plus:
       table-prefix: tb_
   configuration:
    map-underscore-to-camel-case: true
+   log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+

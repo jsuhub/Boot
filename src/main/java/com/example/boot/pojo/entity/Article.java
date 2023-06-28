@@ -12,6 +12,21 @@ public class Article {
 
     String author;
 
+    String description;
+
+    String tag;
+
+    String content;
+
+    @JsonProperty("publish_date")
+    String publishDate;
+
     @JsonProperty("like_amount")
     Integer likeAmount;
+
+    @JsonProperty("browser_amount")
+    Integer browserAmount;
+
+    @JsonProperty("comment_amount")
+    Integer commentAmount;
 }

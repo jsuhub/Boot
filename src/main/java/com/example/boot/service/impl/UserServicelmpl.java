@@ -29,4 +29,10 @@ public class UserServicelmpl extends ServiceImpl<UserMapper, User> implements IU
                 ? userMapper.insert(user) == 1
                 : false;
     }
+
+    @Override
+    public Boolean remoteUserByUsername(String username) {
+       return userMapper.removeUserByUsername(username);
+
+    }
 }

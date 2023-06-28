@@ -5,9 +5,10 @@ import lombok.Data;
 
 @Data
 public class Question {
-        @JsonProperty("question_id")
-        private  int questionId;
 
+        private  int id;
+
+        private  Integer userId;
         private String title;
         private String content;
         private String time;
@@ -20,6 +21,20 @@ public class Question {
 
         private boolean state;
 
+        Integer hot;
 
-
+        @Override
+        public String toString() {
+                return "Question{" +
+                        "questionId=" + id +
+                        ", userId=" + userId +
+                        ", title='" + title + '\'' +
+                        ", content='" + content + '\'' +
+                        ", time='" + time + '\'' +
+                        ", likeAmount=" + likeAmount +
+                        ", browserAmount=" + browserAmount +
+                        ", state=" + state +
+                        ", hot=" + hot +
+                        '}';
+        }
 }

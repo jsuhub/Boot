@@ -6,6 +6,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.List;
+
 @SpringBootTest
 public class TestArticleServiceImpl {
 
@@ -15,8 +17,14 @@ public class TestArticleServiceImpl {
     @Test
     void test() {
         Article article = new Article();
-        article.setTitle("sdsadadsad");
+        article.setTitle("xjf");
         articleService.save(article);
+    }
+
+    @Test
+    void test2() {
+        List<Article> articles = articleService.returnArticleToWebByweighRatio("2023-6-29%");
+        System.out.println(articles);
     }
 
 }

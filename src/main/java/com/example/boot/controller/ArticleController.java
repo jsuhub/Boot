@@ -8,6 +8,7 @@ import com.example.boot.service.impl.ArticleServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -57,5 +58,25 @@ public class ArticleController {
                 ? new ResponseVO<List<Article>>(Status.SUCCESS, "list a user", articleList)
                 : new ResponseVO<List<Article>>(Status.ERROR, "list a user", articleList);
     }
+
+    @GetMapping("/hotArticle/{time}")   //根据权重返回降序后的文章集合
+    ResponseVO<List<Article>> returnArticleToWebByweighRatio(@PathVariable String time){
+        //“2023-6-28-17-51-23”   //查这天的所有文章，根据这天文章的权重返回排序后的文章集合
+        List<Article> articles = articleService.returnArticleToWebByweighRatio(articleService.timeFormat(time));
+        return articles != null
+                ? new ResponseVO<List<Article>>(Status.SUCCESS, "desc successfully", articles)
+                : new ResponseVO<List<Article>>(Status.ERROR, "desc error", articles);
+    }
+
+
+
+    @GetMapping("/compute/{id}")    //根据文章id计算该文章的权重---热度
+    ResponseVO<Boolean> computeWeighRatio(@PathVariable int id){
+        Boolean aBoolean = articleService.computeWeighRatio(id);
+        return aBoolean
+                ?new ResponseVO<Boolean>(Status.SUCCESS,"compute successfully",aBoolean)
+                :new ResponseVO<Boolean>(Status.ERROR,"compute weigh Ratio fail",aBoolean);
+    }
+
 
 }

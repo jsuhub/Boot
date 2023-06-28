@@ -20,6 +20,16 @@ public class Question {
 
         private boolean state;
 
-
-
+        @Override
+        public String toString() {
+                return "Question{" +
+                        "questionId=" + questionId +
+                        ", title='" + title + '\'' +
+                        ", content='" + content + '\'' +
+                        ", time='" + time + '\'' +
+                        ", likeAmount=" + likeAmount +
+                        ", browserAmount=" + browserAmount +
+                        ", state=" + state +
+                        '}';
+        }
 }

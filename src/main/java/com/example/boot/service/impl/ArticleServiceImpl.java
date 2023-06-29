@@ -189,4 +189,8 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         return articles;
     }
 
+    public List<Article> listByArticleTag(String arrticleTag) {
+        List<Article> articles = articleMapper.articleByArticleTag(arrticleTag);
+                   return articles;
+    }
 }

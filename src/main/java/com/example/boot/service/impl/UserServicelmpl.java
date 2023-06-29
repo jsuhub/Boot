@@ -15,7 +15,6 @@ public class UserServicelmpl extends ServiceImpl<UserMapper, User> implements IU
     @Override
     public Boolean getUserByUsername(String username, String passwd) {
         String dbPasswd = userMapper.selectUserPasswdByUsername(username);
-
         if (passwd.equals(dbPasswd)) {
             return true;
         }
@@ -28,5 +27,11 @@ public class UserServicelmpl extends ServiceImpl<UserMapper, User> implements IU
         return userMapper.selectUsernameByUsername(user.getUsername()) == null
                 ? userMapper.insert(user) == 1
                 : false;
+    }
+
+    @Override
+    public Boolean remoteUserByUsername(String username) {
+       return userMapper.removeUserByUsername(username);
+
     }
 }

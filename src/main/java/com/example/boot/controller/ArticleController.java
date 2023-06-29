@@ -21,6 +21,11 @@ public class ArticleController {
     @Autowired
     private ArticleServiceImpl articleService;
 
+    /**
+     * 插入文章
+     * @param articleRequestVO 文章的请求参数
+     * @return
+     */
     @PostMapping
     ResponseVO<Boolean> saveArticle(@RequestBody RequestVO<Article> articleRequestVO) {
         System.out.println(articleRequestVO.getData());
@@ -31,7 +36,7 @@ public class ArticleController {
     }
 
     @DeleteMapping("/{id}")
-    ResponseVO<Boolean> removeArticleById(@PathVariable int id) {
+    ResponseVO<Boolean> removeArticleById(@PathVariable int id ) {
         boolean remove = articleService.removeById(id);
         return remove
                 ? new ResponseVO<Boolean>(Status.SUCCESS, "remove ok", remove)
@@ -62,6 +67,30 @@ public class ArticleController {
                 : new ResponseVO<List<Article>>(Status.ERROR, "list a user", articleList);
     }
 
+    @GetMapping("/listbyhot")
+    ResponseVO<List<Article>> listArticleByHot() {
+        List<Article> articleList = articleService.articleListByHot();
+        return articleList != null
+                ? new ResponseVO<List<Article>>(Status.SUCCESS, "list a user", articleList)
+                : new ResponseVO<List<Article>>(Status.ERROR, "list a user", articleList);
+    }
+
+    @GetMapping("/addLikeAmount/{id}")
+    ResponseVO<Integer> addLikeAmount(@PathVariable int id) {
+        Integer integer = articleService.articleLike(id);
+        return integer >= 0
+                ? new ResponseVO<Integer>(Status.SUCCESS, "like successfully", integer)
+                : new ResponseVO<Integer>(Status.ERROR, "like error", integer);
+    }
+
+    @GetMapping("/cancelLikeAmount/{id}")
+    ResponseVO<Integer> cancleLikeAmount(@PathVariable int id) {
+        Integer integer = articleService.cancelArticle(id);
+        return integer >= 0
+                ? new ResponseVO<Integer>(Status.SUCCESS, "cancel successfully", integer)
+                : new ResponseVO<Integer>(Status.ERROR, "cancel error", integer);
+    }
+
 
     @GetMapping("/hotArticle/{time}")   //根据权重返回降序后的文章集合
     ResponseVO<List<Article>> returnArticleToWebByweighRatio(@PathVariable String time){
@@ -72,8 +101,6 @@ public class ArticleController {
                 : new ResponseVO<List<Article>>(Status.ERROR, "desc error", articles);
     }
 
-
-
     @GetMapping("/compute/{id}")    //根据文章id计算该文章的权重---热度
     ResponseVO<Boolean> computeWeighRatio(@PathVariable int id){
         Boolean aBoolean = articleService.computeWeighRatio(id);
@@ -82,13 +109,10 @@ public class ArticleController {
                 :new ResponseVO<Boolean>(Status.ERROR,"compute weigh Ratio fail",aBoolean);
     }
 
-
     @GetMapping("/list/{page}")
     ResponseVO<List> listArticleByPage(@PathVariable int page) {
-
         IPage iPage = new Page(page, 5);
         IPage page1 = articleService.page(iPage, null);
-
         List records = page1.getRecords();
         return page1 != null
                 ? new ResponseVO<>(Status.SUCCESS, "list a user", records)

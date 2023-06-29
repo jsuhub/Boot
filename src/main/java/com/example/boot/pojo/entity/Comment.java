@@ -7,20 +7,43 @@ import lombok.Data;
 public class Comment {
     Integer id;
 
-@JsonProperty("com_Content")
+    @JsonProperty("com_Content")
     String comContent;
 
-@JsonProperty("com_Like")
+    @JsonProperty("com_Like")
     Integer comLike;
 
-@JsonProperty("user_id")
+    @JsonProperty("user_id")
     Integer userId;
 
-@JsonProperty("pro_id")
+    @JsonProperty("pro_id")
     Integer proId;
 
-@JsonProperty("essay_id")
+    @JsonProperty("essay_id")
+    String content;
+
+    Integer likeAmount;
+
+    @JsonProperty("user_id")
+    Integer userId;
+
+    @JsonProperty("pro_id")
+    Integer proId;
+
+    @JsonProperty("essay_id")
+  
     Integer essayId;
 
+    String date;
 
+    @Override
+    public String toString() {
+        return "Comment{" +
+                "id=" + id +
+                ", comLike=" + likeAmount
+                +
+                ", essayId=" + essayId +
+                ", date='" + date + '\'' +
+                '}';
+    }
 }

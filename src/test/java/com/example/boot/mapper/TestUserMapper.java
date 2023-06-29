@@ -2,6 +2,7 @@ package com.example.boot.mapper;
 
 
 import com.example.boot.pojo.entity.User;
+import org.apache.ibatis.annotations.Delete;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -25,9 +26,17 @@ public class TestUserMapper {
     }
 
     @Test
+    void  testremoteUserByUsername(){
+       userMapper.removeUserByUsername("yuliang");
+    }
+
+
+
+    @Test
     void testInsert () {
         User user = new User();
-        user.setUsername("s1111111");
+        user.setUsername("shuhao");
+
         int insert = userMapper.insert(user);
         System.out.println(insert);
     }

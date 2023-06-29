@@ -16,19 +16,29 @@ public class Article {
     String content;
 
     Integer hot;
+  
     @JsonProperty("like_amount")
     Integer likeAmount;
 
     @JsonProperty("star_amount")
     Integer starAmount;
+  
     @JsonProperty("browser_amount")
     Integer browserAmount;
+  
     String description;
+
     String tag;
+
+    @JsonProperty("publish_date")
+    String publishDate;
+
+    @JsonProperty("browser_amount")
+    Integer browserAmount;
+
     @JsonProperty("comment_amount")
     Integer commentAmount;
-
-
+  
     @Override
     public String toString() {
         return "Article{" +
@@ -45,4 +55,5 @@ public class Article {
                 ", commentAmount=" + commentAmount +
                 '}';
     }
+
 }

@@ -28,9 +28,14 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 
     @Autowired
     QuestionMapper questionMapper;
-  
+
+    /**
+     * 根据文章id计算该文章权重，并更新权重字段数据
+     * @param id 文章唯一标识
+     * @return 返回一个boolean值(true标识更新权重字段成功，false表示更新失败)
+     */
     @Override
-    public Boolean computeWeighRatio(int id) {   //前端传过来一个文章id，计算这篇文章的权重。并更新这篇文章的数据(加入权重字段)
+    public Boolean computeWeighRatio(int id) {
         int weighRatio;
         Article article = articleMapper.selectById(id);
         Integer likeAmount = article.getLikeAmount();
@@ -42,18 +47,36 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
                 : false;
     }
 
+    /**
+     * 返回根据时间和权重排序后的所有文章
+     * @param time 时间
+     * @return 返回排序后的所有文章
+     */
     public List<Article> returnArticleToWebByweighRatio(String time){
         return articleMapper.getArticleByTimeAndHot(time);
     }
 
+    /**
+     * 对时间进行分割，保留时间的年月日
+     * @param data 时间
+     * @return 返回修改后的时间
+     */
     public String timeFormat(String data){
         String time;
-        String[] parts = data.split("-");//data="2023-6-29-1-29-45"
+        String[] parts = data.split("-");
         int year = Integer.parseInt(parts[0]);
         int month = Integer.parseInt(parts[1]);
         int day = Integer.parseInt(parts[2]);
         time=year+"-"+month+"-"+day;
         return time+'%';
+    }
+
+    /**
+     * 返回根据时间降序后的所有文章
+     * @return 降序后的所有文章
+     */
+    public List<Article> returnArticleByTimeDesc(){
+        return articleMapper.getArticleByTimeDesc();
     }
 
     /**

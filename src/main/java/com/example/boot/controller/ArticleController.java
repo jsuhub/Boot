@@ -3,6 +3,7 @@ package com.example.boot.controller;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.boot.pojo.entity.Article;
+import com.example.boot.pojo.entity.Question;
 import com.example.boot.pojo.vo.RequestVO;
 import com.example.boot.pojo.vo.ResponseVO;
 import com.example.boot.constant.Status;
@@ -125,9 +126,12 @@ public class ArticleController {
     }
 
 
-
-
-    @GetMapping("/hotArticle/{time}")   //根据权重返回降序后的文章集合
+    /**
+     * 根据当天发布的文章的权重返回降序后的所有文章
+     * @param time 时间
+     * @return ResponseVO<List<Article>> 响应数据实体
+     */
+    @GetMapping("/hotArticle/{time}")
     ResponseVO<List<Article>> returnArticleToWebByweighRatio(@PathVariable String time){
         //“2023-6-28-17-51-23”   //查这天的所有文章，根据这天文章的权重返回排序后的文章集合
         List<Article> articles = articleService.returnArticleToWebByweighRatio(articleService.timeFormat(time));
@@ -136,7 +140,12 @@ public class ArticleController {
                 : new ResponseVO<List<Article>>(Status.ERROR, "desc error", articles);
     }
 
-    @GetMapping("/compute/{id}")    //根据文章id计算该文章的权重---热度
+    /**
+     *  根据文章的id计算该文章的权重(热度)
+     * @param id 文章的唯一标识
+     * @return ResponseVO<Boolean> 响应数据实体
+     */
+    @GetMapping("/compute/{id}")
     ResponseVO<Boolean> computeWeighRatio(@PathVariable int id){
         Boolean aBoolean = articleService.computeWeighRatio(id);
         return aBoolean
@@ -166,5 +175,17 @@ public class ArticleController {
             responseVO = new ResponseVO<>(Status.SUCCESS, " successfully", articleList);
              }
               return responseVO;
-}
+    }
+  
+    /**
+     * 根据时间降序返回当前库中所有的文章
+     * @return ResponseVO<List<Article>> 响应数据实体
+     */
+    @GetMapping("/timeArticle")
+    ResponseVO<List<Article>> returnArticleByTimeAsc(){
+        List<Article> article = articleService.returnArticleByTimeDesc();
+        return article!=null
+                ?new ResponseVO<>(Status.SUCCESS,"Asc successfully",article)
+                :new ResponseVO<>(Status.SUCCESS,"Asc successfully",article);
+    }
 }

@@ -8,4 +8,6 @@ public interface IUserService extends IService<User> {
     Boolean getUserByUsername(String username, String passwd);
 
     Boolean getUsernameByUsername(User user);
+
+    Boolean remoteUserByUsername(String username);
 }

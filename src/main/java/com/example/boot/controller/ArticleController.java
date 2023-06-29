@@ -3,6 +3,7 @@ package com.example.boot.controller;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.boot.pojo.entity.Article;
+import com.example.boot.pojo.entity.Follow;
 import com.example.boot.pojo.vo.RequestVO;
 import com.example.boot.pojo.vo.ResponseVO;
 import com.example.boot.constant.Status;
@@ -61,6 +62,30 @@ public class ArticleController {
                 ? new ResponseVO<List<Article>>(Status.SUCCESS, "list a user", articleList)
                 : new ResponseVO<List<Article>>(Status.ERROR, "list a user", articleList);
     }
+  
+    @GetMapping("/listbyhot")
+    ResponseVO<List<Article>> listArticleByHot() {
+        List<Article> articleList = articleService.articleListByHot();
+        return articleList != null
+                ? new ResponseVO<List<Article>>(Status.SUCCESS, "list a user", articleList)
+                : new ResponseVO<List<Article>>(Status.ERROR, "list a user", articleList);
+    }
+
+    @GetMapping("/addLikeAmount/{id}")
+    ResponseVO<Integer> addLikeAmount(@PathVariable int id) {
+        Integer integer = articleService.articleLike(id);
+        return integer >= 0
+                ? new ResponseVO<Integer>(Status.SUCCESS, "like successfully", integer)
+                : new ResponseVO<Integer>(Status.ERROR, "like error", integer);
+    }
+
+    @GetMapping("/cancelLikeAmount/{id}")
+    ResponseVO<Integer> cancleLikeAmount(@PathVariable int id) {
+        Integer integer = articleService.cancelArticle(id);
+        return integer >= 0
+                ? new ResponseVO<Integer>(Status.SUCCESS, "cancel successfully", integer)
+                : new ResponseVO<Integer>(Status.ERROR, "cancel error", integer);
+    }
 
 
     @GetMapping("/hotArticle/{time}")   //根据权重返回降序后的文章集合
@@ -94,5 +119,5 @@ public class ArticleController {
                 ? new ResponseVO<>(Status.SUCCESS, "list a user", records)
                 : new ResponseVO<>(Status.ERROR, "list a user", records);
     }
-
+  
 }

@@ -24,12 +24,47 @@ public class TestArticleServiceImpl {
     }
 
     @Test
-
     void test2() {
         List<Article> articles = articleService.returnArticleToWebByweighRatio("2023-6-29%");
         System.out.println(articles);
     }
+  
     @Test
+    void testhot(){
+        System.out.println(articleService.articleListByHot());
+    }
+
+    @Test
+    void testlike1(){
+        System.out.println(articleService.articleLike(1));
+    }
+
+    @Test
+    void testlcancel(){
+        System.out.println(articleService.cancelArticle(1));
+    }
+  
+    @Test
+    void testsatrt2(){
+        System.out.println(articleService.addStarAmount(1));
+    }
+  
+    @Test
+    void testcanl2(){
+        System.out.println(articleService.cancelStarAmount(1));
+    }
+  
+    @Test
+    void testbrowser(){
+        System.out.println(articleService.addBrowserAmount(1));
+    }
+  
+    @Test
+    void testbroweslike(){
+        System.out.println(
+                articleService.cancelBrowserAmount(1));
+    }
+
     void testSelectPage() {
         IPage iPage = new Page(0, 5);
         IPage page = articleService.page(iPage, null);

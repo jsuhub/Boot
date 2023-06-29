@@ -81,5 +81,15 @@ public class UserController {
                 ? new ResponseVO<>(Status.SUCCESS, "register ok", usernameByUsername)
                 : new ResponseVO<>(Status.ERROR, "register failed", usernameByUsername);
     }
+
+    @PostMapping("/logout")
+    ResponseVO<Boolean> logout(@RequestBody RequestVO<String> userRequestVO) {
+        String data = userRequestVO.getData();
+        Boolean remoteUserByUsername = userService.remoteUserByUsername(data);
+        return remoteUserByUsername
+                ? new ResponseVO<>(Status.SUCCESS, "logout ok", remoteUserByUsername)
+                : new ResponseVO<>(Status.ERROR, "logout failed", remoteUserByUsername);
+    }
+
 }
 

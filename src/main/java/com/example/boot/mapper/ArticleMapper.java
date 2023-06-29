@@ -13,6 +13,10 @@ import java.util.List;
 @Mapper
 public interface ArticleMapper extends BaseMapper<Article> {
 
+    List<Article> articleByHot();
+
+    @Select("select  * from tb_question where user_id=#{userId}")
+    List<Article> articleByUserId(Integer userId);
 
 
     @Select("select * from tb_article where publish_date like #{time} order by weigh_ratio desc")  //根据当天所发布的文章的权重进行逆序
@@ -23,7 +27,5 @@ public interface ArticleMapper extends BaseMapper<Article> {
 
     @Select("select * from tb_article limit #{page}, #{pageSize}")
     List<Article> selectByMyPage (int page, int pageSize);
-
-
 
 }

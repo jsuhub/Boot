@@ -12,4 +12,15 @@ public class CommentServicelmpl extends ServiceImpl<CommentMapper,Comment> imple
     @Autowired
     private CommentMapper commentMapper;
 
+    public Boolean addComment_ques(Comment comment){
+        Integer essayId = comment.getEssayId();
+        Integer userId = comment.getUserId();
+        Comment comment1=commentMapper.selectCommentByUserIdandEssayId(userId,essayId);
+        if(comment1 ==null)
+        {
+            commentMapper.insert(comment);
+            return true;
+        }
+        else return false;
+    }
 }

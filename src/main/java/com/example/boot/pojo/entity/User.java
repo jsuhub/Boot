@@ -15,8 +15,10 @@ public class User {
     String email;
     String tel;
     String sex;
-    String avatar;
+    String image;
 
+    String date;
+    String status;
 
     @Override
     public String toString() {
@@ -27,7 +29,9 @@ public class User {
                 ", email='" + email + '\'' +
                 ", tel='" + tel + '\'' +
                 ", sex='" + sex + '\'' +
-                ", avatar='" + avatar + '\'' +
+                ", image='" + image + '\'' +
+                ", date='" + date + '\'' +
+                ", status='" + status + '\'' +
                 '}';
     }
 }

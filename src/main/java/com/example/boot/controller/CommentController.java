@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+
 @RestController
 @RequestMapping("/comment")
 public class CommentController {
@@ -35,7 +36,6 @@ public class CommentController {
                 ? new ResponseVO<Boolean>(Status.SUCCESS, "remove ok", remove)
                 : new ResponseVO<Boolean>(Status.ERROR, "remove ok", remove);
     }
-
 
     @GetMapping("/{id}")
     ResponseVO<Comment> getCommentById(@PathVariable int id) {

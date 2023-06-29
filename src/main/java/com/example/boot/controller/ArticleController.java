@@ -20,6 +20,11 @@ public class ArticleController {
     @Autowired
     private ArticleServiceImpl articleService;
 
+    /**
+     * 插入文章
+     * @param articleRequestVO 文章的请求参数
+     * @return
+     */
     @PostMapping
     ResponseVO<Boolean> saveArticle(@RequestBody RequestVO<Article> articleRequestVO) {
         System.out.println(articleRequestVO.getData());
@@ -30,7 +35,7 @@ public class ArticleController {
     }
 
     @DeleteMapping("/{id}")
-    ResponseVO<Boolean> removeArticleById(@PathVariable int id) {
+    ResponseVO<Boolean> removeArticleById(@PathVariable int id ) {
         boolean remove = articleService.removeById(id);
         return remove
                 ? new ResponseVO<Boolean>(Status.SUCCESS, "remove ok", remove)

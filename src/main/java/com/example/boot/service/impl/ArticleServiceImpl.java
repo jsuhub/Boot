@@ -16,6 +16,8 @@ import java.util.List;
 public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> implements IArticleService{
     @Autowired
     ArticleMapper articleMapper;
+
+
     @Override
     public Boolean computeWeighRatio(int id) {   //前端传过来一个文章id，计算这篇文章的权重。并更新这篇文章的数据(加入权重字段)
         int weighRatio;

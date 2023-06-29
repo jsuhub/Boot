@@ -8,13 +8,18 @@ public class User {
 
 
     String username;
+
     Integer id;
 
     @JsonProperty("passwd")
     String password;
+
     String email;
+
     String tel;
+
     String sex;
+
     String avatar;
 
 

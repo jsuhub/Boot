@@ -6,11 +6,13 @@ import lombok.Data;
 @Data
 public class Question {
         @JsonProperty("question_id")
-        private  int questionId;
+        private  int id;
 
         private String title;
+
         private String content;
-        private String time;
+
+        private String publishDate;
 
         @JsonProperty("like_amount")
         private int likeAmount;
@@ -20,16 +22,5 @@ public class Question {
 
         private boolean state;
 
-        @Override
-        public String toString() {
-                return "Question{" +
-                        "questionId=" + questionId +
-                        ", title='" + title + '\'' +
-                        ", content='" + content + '\'' +
-                        ", time='" + time + '\'' +
-                        ", likeAmount=" + likeAmount +
-                        ", browserAmount=" + browserAmount +
-                        ", state=" + state +
-                        '}';
-        }
+
 }

@@ -2,8 +2,8 @@ package com.example.boot.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.boot.mapper.QuestionMapper;
-import com.example.boot.pojo.entity.Article;
 import com.example.boot.pojo.entity.Question;
+import com.example.boot.pojo.vo.ResponseVO;
 import com.example.boot.service.IQuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,8 +14,9 @@ import java.util.List;
 public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> implements IQuestionService {
     @Autowired
     QuestionMapper questionMapper;
-    @Override
-    public Boolean computeWeighRatio(int id) {   //前端传过来一个文章id，计算这篇文章的权重。并更新这篇文章的数据(加入权重字段)
+
+
+    public Boolean computeWeighRatio(int id) {   //前端传过来一问题id，计算这篇问题的权重。并更新这篇文章的数据(加入权重字段)
         int weighRatio;
         Question question = questionMapper.selectById(id);
         Integer likeAmount = question.getLikeAmount();
@@ -27,7 +28,7 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
     }
 
 
-    public List<Article> returnQuestionToWebByWeighRatio(String time){
+    public List<Question> returnQuestionToWebByWeighRatio(String time){
         return questionMapper.getQuestionByTimeAndHot(time);
     }
 
@@ -41,4 +42,11 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
         time=year+"-"+month+"-"+day;
         return time+'%';
     }
+
+
+    public List<Question> returnQuestionByTimeAsc(){    //根据时间降序返回问题集合
+        return questionMapper.getQuestionByTimeAsc();
+    }
+
+
 }

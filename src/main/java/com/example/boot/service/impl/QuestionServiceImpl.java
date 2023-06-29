@@ -23,8 +23,13 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
 
     FollowMapper followMapper;
 
+    /**
+     * 根据问题的id计算该问题权重，并更新权重字段数据
+     * @param id 问题唯一标识
+     * @return 返回boolean值(true标识更新权重字段成功，false表示更新失败)
+     */
     @Override
-    public Boolean computeWeighRatio(int id) {   //前端传过来一个文章id，计算这篇文章的权重。并更新这篇文章的数据(加入权重字段)
+    public Boolean computeWeighRatio(int id) {
         int weighRatio;
         Question question = questionMapper.selectById(id);
         Integer likeAmount = question.getLikeAmount();
@@ -35,10 +40,20 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
                 : false;
     }
 
+    /**
+     * 返回根据时间和权重排序后的所有问题
+     * @param time 时间
+     * @return 返回排序后的所有问题
+     */
     public List<Question> returnQuestionToWebByWeighRatio(String time){
         return questionMapper.getQuestionByTimeAndHot(time);
     }
 
+    /**
+     * 对时间进行分割，保留时间的年月日
+     * @param data 时间
+     * @return 返回修改后的时间
+     */
     public String timeFormat(String data){
         String time;
         String[] parts = data.split("-");//data="2023-6-29-1-29-45"
@@ -49,10 +64,13 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
         return time+'%';
     }
 
-    public List<Question> returnQuestionByTimeAsc(){    //根据时间降序返回问题集合
+    /**
+     * 返回根据时间降序后的所有问题
+     * @return 降序后的所有问题
+     */
+    public List<Question> returnQuestionByTimeAsc(){
         return questionMapper.getQuestionByTimeAsc();
     }
-
 
     /**
      * 展示关注用户的问题
@@ -70,24 +88,6 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
                 questions.add(questionById.get(j));
             }
         }
-        return questions;
-    }
-
-    /**
-     * 热点问题
-     * @return 一系列问题
-     */
-    public List<Question> questionsListByHot()
-    {
-        Wrapper<Question> wrapper = null;
-        questionMapper.selectList(wrapper);
-        List<Question>  questions = questionMapper.getQuestionIdQuestions();
-        for ( int i=0;i<questions.size();i++)
-        {
-            int hot= questions.get(i).getBrowserAmount()+
-                    questions.get(i).getLikeAmount()*5;
-            questions.get(i).setHot(hot);
-            questionMapper.updateById(questions.get(i));   }
         return questions;
     }
 

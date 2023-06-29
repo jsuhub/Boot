@@ -17,5 +17,4 @@ public interface IQuestionService extends IService<Question> {
 
     public List<Question> returnQuestionByTimeAsc();  //根据时间降序返回问题集合
 
-    public List<Article> returnQuestionToWebByWeighRatio(String time);
 }

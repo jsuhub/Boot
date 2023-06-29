@@ -20,12 +20,9 @@ public class Article {
     @JsonProperty("like_amount")
     Integer likeAmount;
 
-
-    Integer starAmount;
-
     @JsonProperty("star_amount")
     Integer starAmount;
-  
+
     @JsonProperty("browser_amount")
     Integer browserAmount;
   

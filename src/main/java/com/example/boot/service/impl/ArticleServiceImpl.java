@@ -24,9 +24,6 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     ArticleMapper articleMapper;
 
     @Autowired
-    ArticleMapper articleMapper;
-  
-    @Autowired
     FollowMapper followMapper;
 
     @Autowired

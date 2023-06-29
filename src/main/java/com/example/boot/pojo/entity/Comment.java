@@ -24,12 +24,6 @@ public class Comment {
 
     Integer likeAmount;
 
-    @JsonProperty("user_id")
-    Integer userId;
-
-    @JsonProperty("pro_id")
-    Integer proId;
-
     @JsonProperty("essay_id")
   
     Integer essayId;

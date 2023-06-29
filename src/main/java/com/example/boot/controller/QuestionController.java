@@ -54,25 +54,16 @@ public class QuestionController {
     ResponseVO<Question>getQuestion(@PathVariable  int id){          //查
         Question byId = questionService.getById(id);
         return byId !=null
-                ?new ResponseVO<Question>(Status.SUCCESS,"get a question",byId)
-                :new ResponseVO<Question>(Status.ERROR,"get failed",byId);
+                ?new ResponseVO<>(Status.SUCCESS,"get a question",byId)
+                :new ResponseVO<>(Status.ERROR,"get failed",byId);
     }
 
     @GetMapping("/compute/{id}")    //根据问题的id计算该问题的权重---热度
     ResponseVO<Boolean> computeWeighRatio(@PathVariable int id){
         Boolean aBoolean = questionService.computeWeighRatio(id);
         return aBoolean
-                ?new ResponseVO<Boolean>(Status.SUCCESS,"compute successfully",aBoolean)
-                :new ResponseVO<Boolean>(Status.ERROR,"compute weigh Ratio fail",aBoolean);
-    }
-
-    @GetMapping("/hotQuestion/{time}")   //根据当天发布的问题和权重综合返回降序后的问题集合
-    ResponseVO<List<Question>> returnQuestionToWebByWeighRatio(@PathVariable String time){
-        //“2023-6-28-17-51-23”   //查这天的所有问题，根据这天问题的权重返回排序后的问题集合
-        List<Question> question = questionService.returnQuestionToWebByWeighRatio(questionService.timeFormat(time));
-        return question != null
-                ? new ResponseVO<List<Question>>(Status.SUCCESS, "desc successfully",question)
-                : new ResponseVO<List<Question>>(Status.ERROR, "desc error", question);
+                ?new ResponseVO<>(Status.SUCCESS,"compute successfully",aBoolean)
+                :new ResponseVO<>(Status.ERROR,"compute weigh Ratio fail",aBoolean);
     }
 
     //根据时间降序返回问题集合
@@ -80,17 +71,17 @@ public class QuestionController {
     ResponseVO<List<Question>> returnQuestionByTimeAsc(){    //根据时间降序返回问题集合
         List<Question> question = questionService.returnQuestionByTimeAsc();
         return question!=null
-                ?new ResponseVO<List<Question>>(Status.SUCCESS,"Asc successfully",question)
-                :new ResponseVO<List<Question>>(Status.SUCCESS,"Asc successfully",question);
+                ?new ResponseVO<>(Status.SUCCESS,"Asc successfully",question)
+                :new ResponseVO<>(Status.SUCCESS,"Asc successfully",question);
     }
 
     @GetMapping("/hotQuestion/{time}")   //根据权重返回降序后的文章集合
-    ResponseVO<List<Article>> returnArticleToWebByweighRatio(@PathVariable String time){
+    ResponseVO<List<Question>> returnArticleToWebByweighRatio(@PathVariable String time){
         //“2023-6-28-17-51-23”   //查这天的所有文章，根据这天文章的权重返回排序后的文章集合
-        List<Article> articles = questionService.returnQuestionToWebByWeighRatio(questionService.timeFormat(time));
-        return articles != null
-                ? new ResponseVO<List<Article>>(Status.SUCCESS, "desc successfully", articles)
-                : new ResponseVO<List<Article>>(Status.ERROR, "desc error", articles);
+        List<Question> questions = questionService.returnQuestionToWebByWeighRatio(questionService.timeFormat(time));
+        return questions != null
+                ? new ResponseVO<>(Status.SUCCESS, "desc successfully", questions)
+                : new ResponseVO<>(Status.ERROR, "desc error", questions);
     }
 
 }

@@ -21,13 +21,8 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
     @Autowired
     QuestionMapper questionMapper;
 
-    public Boolean computeWeighRatio(int id) {   //前端传过来一问题id，计算这篇问题的权重。并更新这篇文章的数据(加入权重字段)
-      
     FollowMapper followMapper;
 
-    @Autowired
-    QuestionMapper questionMapper;
-  
     @Override
     public Boolean computeWeighRatio(int id) {   //前端传过来一个文章id，计算这篇文章的权重。并更新这篇文章的数据(加入权重字段)
         int weighRatio;
@@ -58,9 +53,6 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
         return questionMapper.getQuestionByTimeAsc();
     }
 
-    public List<Article> returnQuestionToWebByWeighRatio(String time){
-        return questionMapper.getQuestionByTimeAndHot(time);
-    }
 
     /**
      * 展示关注用户的问题
@@ -99,13 +91,4 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
         return questions;
     }
 
-    public String timeFormat(String data){
-        String time;
-        String[] parts = data.split("-");//data="2023-6-29-1-29-45"
-        int year = Integer.parseInt(parts[0]);
-        int month = Integer.parseInt(parts[1]);
-        int day = Integer.parseInt(parts[2]);
-        time=year+"-"+month+"-"+day;
-        return time+'%';
-    }
 }

@@ -19,8 +19,6 @@ public interface QuestionMapper extends BaseMapper<Question> {
     @Select("select * from tb_question where publish_date like #{time} order by weigh_ratio desc")
     public List<Question> getQuestionByTimeAndHot(@Param("time") String time);
   
-    public List<Article> getQuestionByTimeAndHot(@Param("time") String time);
-
     @Update("update tb_question set weigh_ratio=#{weigh_ratio} where id=#{id}")
     public Integer updateWeighRatio(@Param("id") int id, @Param("weigh_ratio") int weigh_ratio);
 

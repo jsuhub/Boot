@@ -19,10 +19,4 @@ public class Response {
 
     private int question_id;
 
-    private int like_amount;
-
-    private int browse_amount;
-
-    private int question_id;
-
 }

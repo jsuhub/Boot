@@ -7,8 +7,6 @@ import lombok.Data;
 public class Question {
   
         @JsonProperty("question_id")
-        private int id;
-
         private Integer id;
 
         private Integer userId;
@@ -18,9 +16,6 @@ public class Question {
         private String content;
 
         private String publishDate;
-  
-        private String content;
-  
         private String time;
 
         @JsonProperty("like_amount")

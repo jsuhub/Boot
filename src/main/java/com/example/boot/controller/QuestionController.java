@@ -31,7 +31,6 @@ public class QuestionController {
      * @return
      * @author yuliang
      */
-
     @DeleteMapping("/{id}")   //删一个问题
     ResponseVO<Boolean>removeQuestion(@PathVariable int id){
         boolean remove=questionService.removeById(id);
@@ -40,7 +39,6 @@ public class QuestionController {
                 :new ResponseVO<>(Status.ERROR,"remove error",remove);
     }
 
-
     @PutMapping  //改一个问题
     ResponseVO<Boolean> updateQuestion(@RequestBody ResponseVO<Question> questionResponseVO ){
         boolean update=questionService.updateById(questionResponseVO.getData());
@@ -48,7 +46,6 @@ public class QuestionController {
                 ?new ResponseVO<Boolean>(Status.SUCCESS,"update ok",update)
                 :new ResponseVO<Boolean>(Status.ERROR,"update error",update);
     }
-
 
     @GetMapping("/{id}")  //查询一个问题
     ResponseVO<Question>getQuestion(@PathVariable  int id){          //查

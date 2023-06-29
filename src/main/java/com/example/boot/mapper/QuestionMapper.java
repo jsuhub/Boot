@@ -26,6 +26,7 @@ public interface QuestionMapper extends BaseMapper<Question> {
     @Select("select *  from  tb_question order by weigh_ratio desc ")
     public List<Question> getQuestionIdQuestions();
 
+
 }
 
 

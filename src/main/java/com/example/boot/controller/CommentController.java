@@ -14,7 +14,7 @@ import java.util.List;
 
 
 @RestController
-@RequestMapping("/comment")
+@RequestMapping("/comments")
 public class CommentController {
 
     @Autowired
@@ -53,4 +53,19 @@ public class CommentController {
                 : new ResponseVO<List<Comment>>(Status.ERROR, "list a user", commentsleList);
     }
 
+    @GetMapping("/atrticle/{id}")
+    ResponseVO<List<Comment>> listArticleComment(@PathVariable int id) {
+        List<Comment> commentsleList = commentService.selectListCommentByArticleId(id);
+        return commentsleList != null
+                ? new ResponseVO<List<Comment>>(Status.SUCCESS, "list a user",commentsleList )
+                : new ResponseVO<List<Comment>>(Status.ERROR, "list a user", commentsleList);
+    }
+
+    @GetMapping("/question/{id}")
+    ResponseVO<List<Comment>> listQuestionComment(@PathVariable int id) {
+        List<Comment> commentsleList = commentService.selectListCommentByQuestionId(id);
+        return commentsleList != null
+                ? new ResponseVO<List<Comment>>(Status.SUCCESS, "list a user",commentsleList )
+                : new ResponseVO<List<Comment>>(Status.ERROR, "list a user", commentsleList);
+    }
 }

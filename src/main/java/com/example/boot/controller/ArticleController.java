@@ -111,10 +111,8 @@ public class ArticleController {
 
     @GetMapping("/list/{page}")
     ResponseVO<List> listArticleByPage(@PathVariable int page) {
-
         IPage iPage = new Page(page, 5);
         IPage page1 = articleService.page(iPage, null);
-
         List records = page1.getRecords();
         return page1 != null
                 ? new ResponseVO<>(Status.SUCCESS, "list a user", records)

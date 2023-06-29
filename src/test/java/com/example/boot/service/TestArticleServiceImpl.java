@@ -60,11 +60,6 @@ public class TestArticleServiceImpl {
     }
   
     @Test
-    void testbroweslike(){
-        System.out.println(
-                articleService.cancelBrowserAmount(1));
-    }
-
     void testSelectPage() {
         IPage iPage = new Page(0, 5);
         IPage page = articleService.page(iPage, null);

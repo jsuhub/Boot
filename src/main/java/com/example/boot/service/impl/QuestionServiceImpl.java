@@ -16,7 +16,9 @@ import java.util.List;
 
 @Service
 public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> implements IQuestionService {
-  
+    @Autowired
+    FollowMapper followMapper;
+
     @Autowired
     QuestionMapper questionMapper;
   
@@ -32,15 +34,15 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
                 : false;
     }
 
-
     public List<Article> returnQuestionToWebByWeighRatio(String time){
         return questionMapper.getQuestionByTimeAndHot(time);
     }
-  
-    @Autowired
-    FollowMapper followMapper;
-  
-    //展示关注的用户上传的问题（上传自己id）
+
+    /**
+     * 展示关注用户的问题
+     * @param userId 用户id
+     * @return 一系列关注问题
+     */
     public List<Question> showProblem(int userId) {
         List<Follow> follows = followMapper.showUser(userId);
         List<Question> questions=new ArrayList<>();
@@ -55,7 +57,10 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
         return questions;
     }
 
-    //展现热点问题
+    /**
+     * 热点问题
+     * @return 一系列问题
+     */
     public List<Question> questionsListByHot()
     {
         Wrapper<Question> wrapper = null;

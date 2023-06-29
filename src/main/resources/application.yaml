@@ -16,6 +16,8 @@ spring:
 
 server:
   port: 80
+  servlet:
+    context-path: /api
 
 mybatis-plus:
   global-config:
@@ -38,6 +40,8 @@ spring:
 
 server:
   port: 80
+  servlet:
+    context-path: /api
 
 mybatis-plus:
   global-config:

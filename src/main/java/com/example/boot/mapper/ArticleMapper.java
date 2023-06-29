@@ -19,7 +19,7 @@ public interface ArticleMapper extends BaseMapper<Article> {
     @Select("select * from tb_article where tag  like #{articleTag};")
     List<Article> articleByArticleTag(String articleTag);
   
-    @Select("select * from tb_question where user_id=#{userId}")
+//    @Select("select * from tb_question where user_id=#{userId}")
   
     @Select("select * from tb_article where user_id=#{userId}")
     List<Article> articleByUserId(Integer userId);
@@ -39,7 +39,9 @@ public interface ArticleMapper extends BaseMapper<Article> {
      * @return 返回查询后的所有文章
      */
     @Select("select * from tb_article where publish_date like #{time} order by weigh_ratio desc")  //根据当天所发布的文章的权重进行逆序
-    public List<Article> getArticleByTimeAndHot(@Param("time") String time);   //返回排序后的文章集合 time="2023-6-29-10-11-11"
+    public List<Article> getArticleByTimeAndHot(@Param("time") String time);   //返回排序后的文章集合
+    // time="2023-6-29-10-11
+    // -11"
 
     /**
      * 根据发布时间降序查询文章

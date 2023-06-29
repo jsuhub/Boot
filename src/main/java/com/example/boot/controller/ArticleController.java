@@ -91,7 +91,7 @@ public class ArticleController {
      * 按照文章热度排名
      * @return  一系列文章
      */
-    @GetMapping("/listbyhot")
+    @GetMapping("/list/hot")
     ResponseVO<List<Article>> listArticleByHot() {
         List<Article> articleList = articleService.articleListByHot();
         return articleList != null
@@ -154,9 +154,9 @@ public class ArticleController {
     }
 
 
-    @GetMapping("/list/{page}")
-    ResponseVO<List> listArticleByPage(@PathVariable int page) {
-        IPage iPage = new Page(page, 5);
+    @GetMapping("/list/{page}/{size}")
+    ResponseVO<List> listArticleByPage(@PathVariable int page,@PathVariable int size ) {
+        IPage iPage = new Page(page, size);
         IPage page1 = articleService.page(iPage, null);
         List records = page1.getRecords();
         return page1 != null

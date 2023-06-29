@@ -16,7 +16,6 @@ public class Question {
         private String content;
 
         private String publishDate;
-        private String time;
 
         @JsonProperty("like_amount")
         private int likeAmount;
@@ -25,7 +24,5 @@ public class Question {
         private int browserAmount;
 
         private boolean state;
-
-        private int hot;
 
 }

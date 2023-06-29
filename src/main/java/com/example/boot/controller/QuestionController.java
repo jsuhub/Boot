@@ -17,7 +17,12 @@ public class QuestionController {
     @Autowired
     private QuestionServiceImpl questionService;
 
-    @PostMapping    //增一个问题
+    /**
+     * 新增一个问题
+     * @param questionResponseVO 请求数据实体
+     * @return ResponseVO<Boolean> 响应数据实体
+     */
+    @PostMapping
     ResponseVO<Boolean> saveQuestion(@RequestBody ResponseVO<Question> questionResponseVO){
         boolean save=questionService.save(questionResponseVO.getData());
         return save
@@ -26,12 +31,11 @@ public class QuestionController {
     }
 
     /**
-     *
-     * @param id
-     * @return
-     * @author yuliang
+     * 根据问题的id删除这个问题
+     * @param id 问题的唯一标识
+     * @return ResponseVO<Boolean> 响应数据实体
      */
-    @DeleteMapping("/{id}")   //删一个问题
+    @DeleteMapping("/{id}")
     ResponseVO<Boolean>removeQuestion(@PathVariable int id){
         boolean remove=questionService.removeById(id);
         return remove
@@ -39,7 +43,12 @@ public class QuestionController {
                 :new ResponseVO<>(Status.ERROR,"remove error",remove);
     }
 
-    @PutMapping  //改一个问题
+    /**
+     * 对一个问题的内容进行更改
+     * @param questionResponseVO 请求数据实体
+     * @return ResponseVO<Boolean> 响应数据实体
+     */
+    @PutMapping
     ResponseVO<Boolean> updateQuestion(@RequestBody ResponseVO<Question> questionResponseVO ){
         boolean update=questionService.updateById(questionResponseVO.getData());
         return update
@@ -47,15 +56,25 @@ public class QuestionController {
                 :new ResponseVO<Boolean>(Status.ERROR,"update error",update);
     }
 
-    @GetMapping("/{id}")  //查询一个问题
-    ResponseVO<Question>getQuestion(@PathVariable  int id){          //查
+    /**
+     * 根据id查询一个问题
+     * @param id 问题的唯一标识
+     * @return ResponseVO<Question> 响应数据实体
+     */
+    @GetMapping("/{id}")
+    ResponseVO<Question>getQuestion(@PathVariable  int id){
         Question byId = questionService.getById(id);
         return byId !=null
                 ?new ResponseVO<>(Status.SUCCESS,"get a question",byId)
                 :new ResponseVO<>(Status.ERROR,"get failed",byId);
     }
 
-    @GetMapping("/compute/{id}")    //根据问题的id计算该问题的权重---热度
+    /**
+     * 根据问题id计算该问题的权重(热度)
+     * @param id 问题的唯一标识
+     * @return ResponseVO<Boolean> 响应数据实体
+     */
+    @GetMapping("/compute/{id}")
     ResponseVO<Boolean> computeWeighRatio(@PathVariable int id){
         Boolean aBoolean = questionService.computeWeighRatio(id);
         return aBoolean
@@ -63,18 +82,25 @@ public class QuestionController {
                 :new ResponseVO<>(Status.ERROR,"compute weigh Ratio fail",aBoolean);
     }
 
-    //根据时间降序返回问题集合
-    @GetMapping("/timeQuestion")   //前端不需要传具体时间，直接返回当前库中按时间排序后的所有问题集合
-    ResponseVO<List<Question>> returnQuestionByTimeAsc(){    //根据时间降序返回问题集合
+    /**
+     * 根据时间降序返回当前库中所有的问题
+     * @return ResponseVO<List<Question>> 响应数据实体
+     */
+    @GetMapping("/timeQuestion")
+    ResponseVO<List<Question>> returnQuestionByTimeAsc(){
         List<Question> question = questionService.returnQuestionByTimeAsc();
         return question!=null
                 ?new ResponseVO<>(Status.SUCCESS,"Asc successfully",question)
                 :new ResponseVO<>(Status.SUCCESS,"Asc successfully",question);
     }
 
-    @GetMapping("/hotQuestion/{time}")   //根据权重返回降序后的文章集合
-    ResponseVO<List<Question>> returnArticleToWebByweighRatio(@PathVariable String time){
-        //“2023-6-28-17-51-23”   //查这天的所有文章，根据这天文章的权重返回排序后的文章集合
+    /**
+     * 根据当天发布的问题的权重返回降序后的所有问题
+     * @param time 当天的时间
+     * @return ResponseVO<List<Question>> 响应数据实体
+     */
+    @GetMapping("/hotQuestion/{time}")
+    ResponseVO<List<Question>> returnQuestionToWebByWeighRatio(@PathVariable String time){
         List<Question> questions = questionService.returnQuestionToWebByWeighRatio(questionService.timeFormat(time));
         return questions != null
                 ? new ResponseVO<>(Status.SUCCESS, "desc successfully", questions)

@@ -33,12 +33,18 @@ public class Article {
     @JsonProperty("publish_date")
     String publishDate;
 
+
+    @JsonProperty("like_amount")
+    Integer likeAmount;
+
+    Integer starAmount;
+
     @JsonProperty("browser_amount")
     Integer browserAmount;
 
     @JsonProperty("comment_amount")
     Integer commentAmount;
-  
+
     @Override
     public String toString() {
         return "Article{" +

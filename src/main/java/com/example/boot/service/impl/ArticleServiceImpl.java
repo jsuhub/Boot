@@ -17,16 +17,53 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.List;
 
+import java.time.LocalDate;
+import java.util.Date;
+import java.util.List;
+
 @Service
 public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> implements IArticleService{
-
+  
     @Autowired
     ArticleMapper articleMapper;
+  
+    @Autowired
+    ArticleMapper articleMapper;
+  
     @Autowired
     FollowMapper followMapper;
 
     @Autowired
     QuestionMapper questionMapper;
+  
+    @Override
+    public Boolean computeWeighRatio(int id) {   //前端传过来一个文章id，计算这篇文章的权重。并更新这篇文章的数据(加入权重字段)
+        int weighRatio;
+        Article article = articleMapper.selectById(id);
+        Integer likeAmount = article.getLikeAmount();
+        Integer starAmount = article.getStarAmount();
+        Integer browserAmount = article.getBrowserAmount();
+        weighRatio=likeAmount*3+starAmount*2+browserAmount;
+        return articleMapper.updateWeighRatio(id,weighRatio) == 1
+                ? true
+                : false;
+    }
+
+    public List<Article> returnArticleToWebByweighRatio(String time){
+        return articleMapper.getArticleByTimeAndHot(time);
+    }
+
+    public String timeFormat(String data){
+        String time;
+        String[] parts = data.split("-");//data="2023-6-29-1-29-45"
+        int year = Integer.parseInt(parts[0]);
+        int month = Integer.parseInt(parts[1]);
+        int day = Integer.parseInt(parts[2]);
+        time=year+"-"+month+"-"+day;
+        return time+'%';
+    }
+
+   
     //添加喜欢
     public Integer articleLike( int id){
         Article article = articleMapper.selectById(id);
@@ -36,7 +73,8 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         articleMapper.updateById(article);
         return amount;
     }
-//添加收藏
+  
+    //添加收藏
     public Integer addStarAmount ( int id){
         Article article = articleMapper.selectById(id);
         int amount= article.getStarAmount();
@@ -45,6 +83,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         articleMapper.updateById(article);
         return amount;
     }
+  
     //添加游览量
     public Integer addBrowserAmount( int id){
         Article article = articleMapper.selectById(id);
@@ -54,6 +93,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         articleMapper.updateById(article);
         return amount;
     }
+  
     //按照热度排序
     public List<Article> articleListByHot()
     {
@@ -92,7 +132,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         return amount;
     }
 
-//展现关注人的发出的文章
+    //展现关注人的发出的文章
     public  List<Article> showArticle(int userId) {
         List<Follow> follows = followMapper.showUser(userId);
         List<Article>  articles=null;
@@ -106,10 +146,6 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         }
         return articles;
     }
-
-
-
-
 
 
 }

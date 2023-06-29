@@ -9,8 +9,11 @@ public class Question {
         private  int id;
 
         private  Integer userId;
+  
         private String title;
+  
         private String content;
+  
         private String time;
 
         @JsonProperty("like_amount")
@@ -21,6 +24,11 @@ public class Question {
 
         private boolean state;
 
+
+        @Override
+        public String toString() {
+                return "Question{" +
+                        "questionId=" + questionId +
         Integer hot;
 
         @Override
@@ -33,7 +41,6 @@ public class Question {
                         ", time='" + time + '\'' +
                         ", likeAmount=" + likeAmount +
                         ", browserAmount=" + browserAmount +
-                        ", state=" + state +
                         ", hot=" + hot +
                         '}';
         }

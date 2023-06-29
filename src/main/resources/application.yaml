@@ -2,7 +2,6 @@ spring:
   profiles:
     active: pro
 
----
 # environment development
 spring:
   config:
@@ -13,6 +12,7 @@ spring:
     username: root
     password: 123123
     url: jdbc:mysql://localhost:3306/db_computer_communication
+
 
 server:
   port: 80
@@ -35,7 +35,6 @@ spring:
     username: root
     password: 123456
     url: jdbc:mysql://47.113.218.167:3306/db_geek_home
-
 
 server:
   port: 80

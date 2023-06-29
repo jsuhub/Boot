@@ -19,13 +19,18 @@ public class TestArticleServiceImpl {
     @Test
     void test() {
         Article article = new Article();
-        article.setTitle("sdsadadsad");
+        article.setTitle("xjf");
         articleService.save(article);
     }
 
     @Test
+    void test2() {
+        List<Article> articles = articleService.returnArticleToWebByweighRatio("2023-6-29%");
+        System.out.println(articles);
+    }
+  
+    @Test
     void testhot(){
-
         System.out.println(articleService.articleListByHot());
     }
 
@@ -38,18 +43,22 @@ public class TestArticleServiceImpl {
     void testlcancel(){
         System.out.println(articleService.cancelArticle(1));
     }
+  
     @Test
     void testsatrt2(){
         System.out.println(articleService.addStarAmount(1));
     }
+  
     @Test
     void testcanl2(){
         System.out.println(articleService.cancelStarAmount(1));
     }
+  
     @Test
     void testbrowser(){
         System.out.println(articleService.addBrowserAmount(1));
     }
+  
     @Test
     void testbroweslike(){
         System.out.println(

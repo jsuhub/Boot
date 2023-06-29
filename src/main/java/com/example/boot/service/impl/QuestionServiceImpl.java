@@ -16,11 +16,34 @@ import java.util.List;
 
 @Service
 public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> implements IQuestionService {
-    @Autowired
-    FollowMapper followMapper;
+  
     @Autowired
     QuestionMapper questionMapper;
-//展示关注的用户上传的问题（上传自己id）
+  
+    @Override
+    public Boolean computeWeighRatio(int id) {   //前端传过来一个文章id，计算这篇文章的权重。并更新这篇文章的数据(加入权重字段)
+        int weighRatio;
+        Question question = questionMapper.selectById(id);
+        Integer likeAmount = question.getLikeAmount();
+        Integer browserAmount = question.getBrowserAmount();
+        weighRatio=likeAmount*3+browserAmount;
+        return questionMapper.updateWeighRatio(id,weighRatio) == 1
+                ? true
+                : false;
+    }
+
+
+    public List<Article> returnQuestionToWebByWeighRatio(String time){
+        return questionMapper.getQuestionByTimeAndHot(time);
+    }
+  
+    @Autowired
+    FollowMapper followMapper;
+  
+    @Autowired
+    QuestionMapper questionMapper;
+  
+    //展示关注的用户上传的问题（上传自己id）
     public List<Question> showProblem(int userId) {
         List<Follow> follows = followMapper.showUser(userId);
         List<Question> questions=new ArrayList<>();
@@ -50,4 +73,13 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
         return questions;
     }
 
+    public String timeFormat(String data){
+        String time;
+        String[] parts = data.split("-");//data="2023-6-29-1-29-45"
+        int year = Integer.parseInt(parts[0]);
+        int month = Integer.parseInt(parts[1]);
+        int day = Integer.parseInt(parts[2]);
+        time=year+"-"+month+"-"+day;
+        return time+'%';
+    }
 }

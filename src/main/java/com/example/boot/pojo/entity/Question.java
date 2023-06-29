@@ -6,7 +6,7 @@ import lombok.Data;
 @Data
 public class Question {
 
-        private  int id;
+        private  Integer id;
 
         private  Integer userId;
   
@@ -24,24 +24,6 @@ public class Question {
 
         private boolean state;
 
+        private int hot;
 
-        @Override
-        public String toString() {
-                return "Question{" +
-                        "questionId=" + questionId +
-        Integer hot;
-
-        @Override
-        public String toString() {
-                return "Question{" +
-                        "questionId=" + id +
-                        ", userId=" + userId +
-                        ", title='" + title + '\'' +
-                        ", content='" + content + '\'' +
-                        ", time='" + time + '\'' +
-                        ", likeAmount=" + likeAmount +
-                        ", browserAmount=" + browserAmount +
-                        ", hot=" + hot +
-                        '}';
-        }
 }

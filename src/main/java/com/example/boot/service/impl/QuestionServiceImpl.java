@@ -40,9 +40,6 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
     @Autowired
     FollowMapper followMapper;
   
-    @Autowired
-    QuestionMapper questionMapper;
-  
     //展示关注的用户上传的问题（上传自己id）
     public List<Question> showProblem(int userId) {
         List<Follow> follows = followMapper.showUser(userId);

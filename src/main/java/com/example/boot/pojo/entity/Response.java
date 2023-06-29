@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class Response {
-    private int resolve_id;
+    private Integer id;
     private String content;
     private String time;
     private int like_amount;

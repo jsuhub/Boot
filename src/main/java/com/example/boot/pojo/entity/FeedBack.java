@@ -4,8 +4,8 @@ import lombok.Data;
 
 @Data
 public class FeedBack {
-    int id;
-    int userId;
+    Integer id;
+    Integer userId;
     String content;
     String publishDate;
 

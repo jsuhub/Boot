@@ -8,24 +8,14 @@ import com.example.boot.mapper.FollowMapper;
 import com.example.boot.mapper.QuestionMapper;
 import com.example.boot.pojo.entity.Article;
 import com.example.boot.pojo.entity.Follow;
-import com.example.boot.pojo.entity.Question;
 import com.example.boot.service.IArticleService;
-import lombok.experimental.Accessors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
 
-import java.util.List;
-
-import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 
 @Service
 public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> implements IArticleService{
-  
-    @Autowired
-    ArticleMapper articleMapper;
   
     @Autowired
     ArticleMapper articleMapper;

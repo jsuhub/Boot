@@ -3,7 +3,6 @@ package com.example.boot.controller;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.boot.pojo.entity.Article;
-import com.example.boot.pojo.entity.Follow;
 import com.example.boot.pojo.vo.RequestVO;
 import com.example.boot.pojo.vo.ResponseVO;
 import com.example.boot.constant.Status;
@@ -11,7 +10,6 @@ import com.example.boot.service.impl.ArticleServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -62,7 +60,7 @@ public class ArticleController {
                 ? new ResponseVO<List<Article>>(Status.SUCCESS, "list a user", articleList)
                 : new ResponseVO<List<Article>>(Status.ERROR, "list a user", articleList);
     }
-  
+
     @GetMapping("/listbyhot")
     ResponseVO<List<Article>> listArticleByHot() {
         List<Article> articleList = articleService.articleListByHot();
@@ -97,8 +95,6 @@ public class ArticleController {
                 : new ResponseVO<List<Article>>(Status.ERROR, "desc error", articles);
     }
 
-
-
     @GetMapping("/compute/{id}")    //根据文章id计算该文章的权重---热度
     ResponseVO<Boolean> computeWeighRatio(@PathVariable int id){
         Boolean aBoolean = articleService.computeWeighRatio(id);
@@ -119,5 +115,5 @@ public class ArticleController {
                 ? new ResponseVO<>(Status.SUCCESS, "list a user", records)
                 : new ResponseVO<>(Status.ERROR, "list a user", records);
     }
-  
+
 }

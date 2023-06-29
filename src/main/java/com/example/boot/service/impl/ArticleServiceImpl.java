@@ -2,6 +2,9 @@ package com.example.boot.service.impl;
 
 
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.boot.mapper.ArticleMapper;
 import com.example.boot.mapper.FollowMapper;
@@ -189,8 +192,16 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         return articles;
     }
 
-    public List<Article> listByArticleTag(String arrticleTag) {
-        List<Article> articles = articleMapper.articleByArticleTag(arrticleTag);
-                   return articles;
+    /**
+     * 按照标签查询文章
+     * @param arrticleTag 文章标签
+     * @return 一系列文章
+     */
+    public List<Article> listByArticleTag(String arrticleTag, int pageoff,int pagemax) {
+        IPage<Article> page=new Page<Article>(pageoff,pagemax);
+        QueryWrapper<Article> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("tag", arrticleTag);
+        IPage<Article> page1 = articleMapper.selectPage(page, queryWrapper);
+        return  page1.getRecords();
     }
 }

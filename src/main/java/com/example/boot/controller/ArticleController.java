@@ -164,10 +164,9 @@ public class ArticleController {
                 : new ResponseVO<>(Status.ERROR, "list articles", records);
     }
 
-    @GetMapping("/search/{articleTag}")
-    ResponseVO<List<Article>> articleTagSelectAll(@PathVariable String articleTag){
-        List<Article> articleList = articleService.listByArticleTag(articleTag);
-        System.out.println(articleList);
+    @GetMapping("/search/{articleTag}/{page}/{pagemax}")
+    ResponseVO<List<Article>> articleTagSelectAll(@PathVariable String articleTag,@PathVariable int page,@PathVariable int pagemax){
+        List<Article> articleList = articleService.listByArticleTag(articleTag,page,pagemax);
         ResponseVO<List<Article>>  responseVO=null;
         if(articleList.size()==0){
         responseVO  = new ResponseVO<>(Status.ERROR, "Tage is null", articleList);

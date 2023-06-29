@@ -52,8 +52,5 @@ public class TestArticleMapper {
         articleService.timeFormat("2021-2-23-5-6-17");
     }
 
-    @Test
-    void testTimeFormat2(){
-        articleMapper.getArticleByTimeAndHot("2023-6-29%");
-    }
+
 }

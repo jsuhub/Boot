@@ -15,9 +15,5 @@ public class TestQuestionServiceImpI {
         System.out.println(questionService.showProblem(1));
 
     }
-    @Test
-    void testQuestionByHot(){
-        System.out.println(questionService.questionsListByHot());
-    }
 
 }

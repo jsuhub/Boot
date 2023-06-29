@@ -25,7 +25,7 @@ public class TestArticleServiceImpl {
 
     @Test
     void test2() {
-        List<Article> articles = articleService.returnArticleToWebByweighRatio("2023-6-29%");
+        List<Article> articles = articleService.returnArticleToWebByweighRatio("2023-06-26",0,5);
         System.out.println(articles);
     }
   

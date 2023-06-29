@@ -125,16 +125,18 @@ public class ArticleController {
                 : new ResponseVO<Integer>(Status.ERROR, "cancel error", integer);
     }
 
-
     /**
-     * 根据当天发布的文章的权重返回降序后的所有文章
-     * @param time 时间
-     * @return ResponseVO<List<Article>> 响应数据实体
+     * 根据这天的文章热度返回文章
+     * @param time 日期
+     * @param page  已经展示文章的数量
+     * @param size  返回文章的大小
+     * @return 一系列文章
      */
     @GetMapping("/hotArticle/{time}")
-    ResponseVO<List<Article>> returnArticleToWebByweighRatio(@PathVariable String time){
+    ResponseVO<List<Article>> returnArticleToWebByweighRatio(@PathVariable String time,@RequestParam("page") int page,
+                                                             @RequestParam("size") int size){
         //“2023-6-28-17-51-23”   //查这天的所有文章，根据这天文章的权重返回排序后的文章集合
-        List<Article> articles = articleService.returnArticleToWebByweighRatio(articleService.timeFormat(time));
+        List<Article> articles = articleService.returnArticleToWebByweighRatio(articleService.timeFormat(time),page,size);
         return articles != null
                 ? new ResponseVO<List<Article>>(Status.SUCCESS, "desc successfully", articles)
                 : new ResponseVO<List<Article>>(Status.ERROR, "desc error", articles);
@@ -164,6 +166,13 @@ public class ArticleController {
                 : new ResponseVO<>(Status.ERROR, "list articles", records);
     }
 
+    /**
+     * 根据文章的标签返回一系列文章
+     * @param articleTag 文章标签
+     * @param page 返回的跳转页数
+     * @param size 页数大小
+     * @return
+     */
     @GetMapping("/search/{articleTag}")
     ResponseVO<List<Article>> articleTagSelectAll(@PathVariable String articleTag, @RequestParam("page") int page,
                                                   @RequestParam("size") int size){

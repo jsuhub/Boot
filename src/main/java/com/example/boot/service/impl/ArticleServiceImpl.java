@@ -13,6 +13,7 @@ import com.example.boot.pojo.entity.Article;
 import com.example.boot.pojo.entity.Follow;
 import com.example.boot.pojo.entity.Question;
 import com.example.boot.service.IArticleService;
+import org.apache.ibatis.annotations.Select;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -55,8 +56,14 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
      * @param time 时间
      * @return 返回排序后的所有文章
      */
-    public List<Article> returnArticleToWebByweighRatio(String time){
-        return articleMapper.getArticleByTimeAndHot(time);
+    public List<Article> returnArticleToWebByweighRatio(String time,int page,int size){
+        Page<Article> articlePage = new Page<>(page, size);
+        QueryWrapper<Article> queryWrapper = new QueryWrapper<>();
+        //@Select("select * from tb_article where publish_date like #{time} order by weigh_ratio desc")
+       queryWrapper.like("publish_date",time);
+       queryWrapper.orderByDesc("weigh_ratio");
+        IPage<Article> page1 = articleMapper.selectPage(articlePage, queryWrapper);
+        return   page1.getRecords();
     }
 
     /**

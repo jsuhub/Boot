@@ -8,6 +8,7 @@ import com.example.boot.mapper.FollowMapper;
 import com.example.boot.mapper.QuestionMapper;
 import com.example.boot.pojo.entity.Article;
 import com.example.boot.pojo.entity.Follow;
+import com.example.boot.pojo.entity.Question;
 import com.example.boot.service.IArticleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -53,8 +54,12 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         return time+'%';
     }
 
-   
-    //添加喜欢
+
+    /**
+     * 添加文章喜欢
+     * @param id 文章Id
+     * @return  文章喜欢量
+     */
     public Integer articleLike( int id){
         Article article = articleMapper.selectById(id);
           int amount= article.getLikeAmount();
@@ -63,8 +68,12 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         articleMapper.updateById(article);
         return amount;
     }
-  
-    //添加收藏
+
+    /**
+     * 添加文章收藏
+     * @param id 文章Id
+     * @return  文章收藏量
+     */
     public Integer addStarAmount ( int id){
         Article article = articleMapper.selectById(id);
         int amount= article.getStarAmount();
@@ -73,8 +82,12 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         articleMapper.updateById(article);
         return amount;
     }
-  
-    //添加游览量
+
+    /**
+     * 添加游览量
+     * @param id 文章Id
+     * @return 浏览量
+     */
     public Integer addBrowserAmount( int id){
         Article article = articleMapper.selectById(id);
         int amount= article.getBrowserAmount();
@@ -83,8 +96,11 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         articleMapper.updateById(article);
         return amount;
     }
-  
-    //按照热度排序
+
+    /**
+     * 按照热度排序
+     * @return 文章数组
+     */
     public List<Article> articleListByHot()
     {
         Wrapper<Article> wrapper = null;
@@ -100,7 +116,11 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
             return articles;
     }
 
-    //取消喜欢
+    /**
+     * 取消点赞
+     * @param id 文章ID
+     * @return  点赞数量
+     */
     public Integer  cancelArticle( int id)
     {
         Article article = articleMapper.selectById(id);
@@ -110,8 +130,12 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         articleMapper.updateById(article);
         return amount;
     }
-    //取消收藏
 
+    /**
+     * 取消收藏
+     * @param id 文章Id
+     * @return  收藏量
+     */
     public Integer  cancelStarAmount( int id)
     {
         Article article = articleMapper.selectById(id);
@@ -122,7 +146,11 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         return amount;
     }
 
-    //展现关注人的发出的文章
+    /**
+     * 展现关注人发出的文章
+     * @param userId 本地用户Id
+     * @return 关注人的文章数组
+     */
     public  List<Article> showArticle(int userId) {
         List<Follow> follows = followMapper.showUser(userId);
         List<Article>  articles=null;

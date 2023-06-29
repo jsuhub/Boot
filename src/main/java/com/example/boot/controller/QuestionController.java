@@ -10,12 +10,14 @@ import java.util.List;
 
 import java.util.List;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/questions")
 public class QuestionController {
 
     @Autowired
     private QuestionServiceImpl questionService;
+
 
     @PostMapping    //增一个问题
     ResponseVO<Boolean> saveQuestion(@RequestBody ResponseVO<Question> questionResponseVO){

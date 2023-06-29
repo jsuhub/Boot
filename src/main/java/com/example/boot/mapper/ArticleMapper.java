@@ -15,6 +15,8 @@ public interface ArticleMapper extends BaseMapper<Article> {
 
     List<Article> articleByHot();
 
+    @Select("select * from tb_article where tag  like #{articleTag};")
+    List<Article> articleByArticleTag(String articleTag);
     @Select("select  * from tb_question where user_id=#{userId}")
     List<Article> articleByUserId(Integer userId);
 

@@ -14,4 +14,6 @@ public interface IArticleService extends IService<Article> {
     public List<Article> returnArticleToWebByweighRatio(String time);
 
     public List<Article> returnArticleByTimeDesc();
+
+    List<Article> articleListByHotPage(int page, int size);
 }

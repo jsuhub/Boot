@@ -50,4 +50,5 @@ public interface ArticleMapper extends BaseMapper<Article> {
 
     @Select("select * from tb_article limit #{page}, #{pageSize}")
     List<Article> selectByMyPage (int page, int pageSize);
+
 }

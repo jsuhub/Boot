@@ -194,14 +194,14 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 
     /**
      * 按照标签查询文章
-     * @param arrticleTag 文章标签
+     * @param articleTag 文章标签
      * @return 一系列文章
      */
-    public List<Article> listByArticleTag(String arrticleTag, int pageoff,int pagemax) {
-        IPage<Article> page=new Page<Article>(pageoff,pagemax);
+    public List<Article> listByArticleTag(String articleTag, int page,int size) {
+        Page<Article> articlePage = new Page<>(page, size);
         QueryWrapper<Article> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("tag", arrticleTag);
-        IPage<Article> page1 = articleMapper.selectPage(page, queryWrapper);
+        queryWrapper.eq("tag", articleTag);
+        IPage<Article> page1 = articleMapper.selectPage(articlePage, queryWrapper);
         return  page1.getRecords();
     }
 }

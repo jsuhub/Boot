@@ -5,12 +5,19 @@ import lombok.Data;
 
 @Data
 public class Question {
+  
+        @JsonProperty("question_id")
+        private int id;
 
-        private  Integer id;
+        private Integer id;
 
-        private  Integer userId;
+        private Integer userId;
   
         private String title;
+
+        private String content;
+
+        private String publishDate;
   
         private String content;
   

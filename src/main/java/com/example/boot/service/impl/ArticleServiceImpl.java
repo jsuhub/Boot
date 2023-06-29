@@ -13,11 +13,16 @@ import com.example.boot.service.IArticleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 @Service
 public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> implements IArticleService{
   
+    @Autowired
+    ArticleMapper articleMapper;
+
     @Autowired
     ArticleMapper articleMapper;
   
@@ -53,7 +58,6 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         time=year+"-"+month+"-"+day;
         return time+'%';
     }
-
 
     /**
      * 添加文章喜欢
@@ -164,6 +168,5 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         }
         return articles;
     }
-
 
 }

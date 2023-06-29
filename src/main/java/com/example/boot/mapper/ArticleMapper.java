@@ -25,7 +25,13 @@ public interface ArticleMapper extends BaseMapper<Article> {
     @Update("update tb_article set weigh_ratio=#{weigh_ratio} where id=#{id}")  //跟据文章id更新表数据(插入权重字段)
     public Integer updateWeighRatio(@Param("id") int id, @Param("weigh_ratio") int weigh_ratio);
 
+
+    @Select("select * from tb_article where publish_date like #{time} order by weigh_ratio desc")  //根据当天所发布的文章的权重进行逆序
+    public List<Article> getArticleByTimeAndHot(@Param("time") String time);   //返回排序后的文章集合 time="2023-6-29-10-11-11"
+
+    @Update("update tb_article set weigh_ratio=#{weigh_ratio} where id=#{id}")  //跟据文章id更新表数据(插入权重字段)
+    public Integer updateWeighRatio(@Param("id") int id, @Param("weigh_ratio") int weigh_ratio);
+
     @Select("select * from tb_article limit #{page}, #{pageSize}")
     List<Article> selectByMyPage (int page, int pageSize);
-
 }

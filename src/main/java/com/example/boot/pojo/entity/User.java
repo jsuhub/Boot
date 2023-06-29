@@ -8,16 +8,24 @@ public class User {
 
 
     String username;
+
     Integer id;
 
     @JsonProperty("passwd")
     String password;
+
     String email;
+
     String tel;
+
     String sex;
+
+    String avatar;
+  
     String image;
 
     String date;
+  
     String status;
 
     @Override

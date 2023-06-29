@@ -11,12 +11,14 @@ import java.util.List;
 public interface CommentMapper extends BaseMapper<Comment> {
 
     @Select("select * from tb_comment_essay where user_id=#{userId} and essay_id=#{essayId}")
-       public Comment selectCommentByUserIdandEssayId(int userId, int essayId);
+    public Comment selectCommentByUserIdandEssayId(int userId, int essayId);
+  
     @Select("select * from tb_comment_essay where  essay_id=#{essayId} and id<>#{hotEssayId} ORDER BY date DESC")
     public List<Comment> selectCommentByEssayId(int essayId, int hotEssayId);
 
     @Select("select * from tb_comment_essay  where essay_id=#{essayId} order by like_amount DESC limit 1")
     public Comment selectCommentByBest(int Id);
+  
     @Select("select * from tb_comment_question where  prob_id=#{probId} and id<>#{hotProbId} ORDER BY date DESC")
     public List<Comment> selectCommentByQuestion(int probId, int hotProbId);
 

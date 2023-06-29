@@ -164,10 +164,10 @@ public class ArticleController {
                 : new ResponseVO<>(Status.ERROR, "list articles", records);
     }
 
-    @GetMapping("/search/{articleTag}")
-    ResponseVO<List<Article>> articleTagSelectAll(@PathVariable String articleTag){
-        List<Article> articleList = articleService.listByArticleTag(articleTag);
-        System.out.println(articleList);
+    @GetMapping("/search/{articleTag}/{page}/{size}")
+    ResponseVO<List<Article>> articleTagSelectAll(@PathVariable String articleTag,@PathVariable int page,
+                                                  @PathVariable int size){
+        List<Article> articleList = articleService.listByArticleTag(articleTag,page,size);
         ResponseVO<List<Article>>  responseVO=null;
         if(articleList.size()==0){
         responseVO  = new ResponseVO<>(Status.ERROR, "Tage is null", articleList);
@@ -184,7 +184,7 @@ public class ArticleController {
     @GetMapping("/timeArticle")
     ResponseVO<List<Article>> returnArticleByTimeAsc(){
         List<Article> article = articleService.returnArticleByTimeDesc();
-        return article!=null
+        return article != null
                 ?new ResponseVO<>(Status.SUCCESS,"Asc successfully",article)
                 :new ResponseVO<>(Status.SUCCESS,"Asc successfully",article);
     }

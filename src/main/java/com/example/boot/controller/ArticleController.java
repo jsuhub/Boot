@@ -134,6 +134,44 @@ public class ArticleController {
     }
 
     /**
+     * 添加收藏量
+     * @param id 文章Id
+     * @return 收藏量
+     */
+    @GetMapping("/addStarAmount/{id}")
+    ResponseVO<Integer> addStarAmount(@PathVariable int id) {
+        Integer integer = articleService.addStarAmount(id);
+        return integer >= 0
+                ? new ResponseVO<Integer>(Status.SUCCESS, "like successfully", integer)
+                : new ResponseVO<Integer>(Status.ERROR, "like error", integer);
+    }
+
+    /**
+     * 添加浏览量
+     * @param id 文章Id
+     * @return 浏览量
+     */
+    @GetMapping("/addBrowserAmount/{id}")
+    ResponseVO<Integer> addBrowserAmount(@PathVariable int id) {
+        Integer integer = articleService.addBrowserAmount(id);
+        return integer >= 0
+                ? new ResponseVO<Integer>(Status.SUCCESS, "browser successfully", integer)
+                : new ResponseVO<Integer>(Status.ERROR, "browser error", integer);
+    }
+
+    /**
+     * 取消收藏
+     * @param id 用戶文章id
+     * @return 收藏量
+     */
+    @GetMapping("/cancelStarAmount/{id}")
+    ResponseVO<Integer> cancelStarAmount(@PathVariable int id) {
+        Integer integer = articleService.cancelStarAmount(id);
+        return integer >= 0
+                ? new ResponseVO<Integer>(Status.SUCCESS, "like successfully", integer)
+                : new ResponseVO<Integer>(Status.ERROR, "like error", integer);
+    }
+    /**
      * 取消点赞量
      *
      * @param id 文章Id
@@ -147,17 +185,18 @@ public class ArticleController {
                 : new ResponseVO<Integer>(Status.ERROR, "cancel error", integer);
     }
 
-
     /**
-     * 根据当天发布的文章的权重返回降序后的所有文章
-     *
-     * @param time 时间
-     * @return ResponseVO<List < Article>> 响应数据实体
+     * 根据这天的文章热度返回文章
+     * @param time 日期
+     * @param page  已经展示文章的数量
+     * @param size  返回文章的大小
+     * @return 一系列文章
      */
     @GetMapping("/hotArticle/{time}")
-    ResponseVO<List<Article>> returnArticleToWebByweighRatio(@PathVariable String time) {
+    ResponseVO<List<Article>> returnArticleToWebByweighRatio(@PathVariable String time,@RequestParam("page") int page,
+                                                             @RequestParam("size") int size){
         //“2023-6-28-17-51-23”   //查这天的所有文章，根据这天文章的权重返回排序后的文章集合
-        List<Article> articles = articleService.returnArticleToWebByweighRatio(articleService.timeFormat(time));
+        List<Article> articles = articleService.returnArticleToWebByweighRatio(articleService.timeFormat(time),page,size);
         return articles != null
                 ? new ResponseVO<List<Article>>(Status.SUCCESS, "desc successfully", articles)
                 : new ResponseVO<List<Article>>(Status.ERROR, "desc error", articles);
@@ -199,13 +238,20 @@ public class ArticleController {
                 : new ResponseVO<>(Status.ERROR, "list articles", records);
     }
 
+    /**
+     * 根据文章的标签返回一系列文章
+     * @param articleTag 文章标签
+     * @param page 返回的跳转页数
+     * @param size 页数大小
+     * @return
+     */
     @GetMapping("/search/{articleTag}")
     ResponseVO<List<Article>> articleTagSelectAll(@PathVariable String articleTag, @RequestParam("page") int page,
                                                   @RequestParam("size") int size) {
-        List<Article> articleList = articleService.listByArticleTag(articleTag, page, size);
-        return articleList != null
-                ? new ResponseVO<>(Status.SUCCESS, "Asc successfully", articleList)
-                : new ResponseVO<>(Status.SUCCESS, "Asc successfully", articleList);
+//        List<Article> articleList = articleService.listByArticleTag(articleTag, page, size);
+        return null != null
+                ? new ResponseVO<>(Status.SUCCESS, "Asc successfully", null)
+                : new ResponseVO<>(Status.SUCCESS, "Asc successfully", null);
     }
 
     /**
@@ -220,4 +266,20 @@ public class ArticleController {
                 ? new ResponseVO<>(Status.SUCCESS, "Asc successfully", article)
                 : new ResponseVO<>(Status.SUCCESS, "Asc successfully", article);
     }
+
+    /**
+     * 按照页表展示关注人推出的问题
+     * @param userId 用户Id
+     * @param page  页数
+     * @param size  大小
+     * @return
+     */
+    @GetMapping("/follow/{userId}")
+    ResponseVO<List<Article>> articleFollower(@PathVariable int userId, @RequestParam("page") int page,
+                                                  @RequestParam("size") int size){
+        return null == null
+                ? new ResponseVO<>(Status.SUCCESS,"Asc successfully", null)
+                : new ResponseVO<>(Status.SUCCESS,"Asc successfully", null);
+    }
+
 }

@@ -11,7 +11,7 @@ public interface IArticleService extends IService<Article> {
 
     public Boolean computeWeighRatio(int id);
   
-    public List<Article> returnArticleToWebByweighRatio(String time);
+    public List<Article> returnArticleToWebByweighRatio(String time,int page,int size);
 
     public List<Article> returnArticleByTimeDesc();
 

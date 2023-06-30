@@ -13,10 +13,12 @@ import com.example.boot.pojo.entity.Article;
 import com.example.boot.pojo.entity.Follow;
 import com.example.boot.pojo.entity.Question;
 import com.example.boot.service.IArticleService;
+import org.apache.ibatis.annotations.Select;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -57,8 +59,14 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
      * @param time 时间
      * @return 返回排序后的所有文章
      */
-    public List<Article> returnArticleToWebByweighRatio(String time) {
-        return articleMapper.getArticleByTimeAndHot(time);
+    public List<Article> returnArticleToWebByweighRatio(String time, int page, int size) {
+        Page<Article> articlePage = new Page<>(page, size);
+        QueryWrapper<Article> queryWrapper = new QueryWrapper<>();
+        //@Select("select * from tb_article where publish_date like #{time} order by weigh_ratio desc")
+        queryWrapper.like("publish_date", time);
+        queryWrapper.orderByDesc("weigh_ratio");
+        IPage<Article> page1 = articleMapper.selectPage(articlePage, queryWrapper);
+        return page1.getRecords();
     }
 
     /**
@@ -166,7 +174,6 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
          */
 
 
-
         List<Article> articles = articleMapper.articleByHot();
         return articles;
     }
@@ -186,6 +193,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         return amount;
     }
 
+
     /**
      * 取消收藏
      *
@@ -201,35 +209,4 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         return amount;
     }
 
-    /**
-     * 展现关注人发出的文章
-     *
-     * @param userId 本地用户Id
-     * @return 关注人的文章数组
-     */
-    public List<Article> showArticle(int userId) {
-        List<Follow> follows = followMapper.showUser(userId);
-        List<Article> articles = null;
-        for (int i = 0; i < follows.size(); i++) {
-            List<Article> articles1 = articleMapper.articleByUserId(follows.get(i).getUserId());
-            for (int j = 0; j < articles1.size(); j++) {
-                articles.add(articles1.get(j));
-            }
-        }
-        return articles;
-    }
-
-    /**
-     * 按照标签查询文章
-     *
-     * @param articleTag 文章标签
-     * @return 一系列文章
-     */
-    public List<Article> listByArticleTag(String articleTag, int page, int size) {
-        Page<Article> articlePage = new Page<>(page, size);
-        QueryWrapper<Article> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("tag", articleTag);
-        IPage<Article> page1 = articleMapper.selectPage(articlePage, queryWrapper);
-        return page1.getRecords();
-    }
 }

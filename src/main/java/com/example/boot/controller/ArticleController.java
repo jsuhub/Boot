@@ -113,6 +113,44 @@ public class ArticleController {
     }
 
     /**
+     * 添加收藏量
+     * @param id 文章Id
+     * @return 收藏量
+     */
+    @GetMapping("/addStarAmount/{id}")
+    ResponseVO<Integer> addStarAmount(@PathVariable int id) {
+        Integer integer = articleService.addStarAmount(id);
+        return integer >= 0
+                ? new ResponseVO<Integer>(Status.SUCCESS, "like successfully", integer)
+                : new ResponseVO<Integer>(Status.ERROR, "like error", integer);
+    }
+
+    /**
+     * 添加浏览量
+     * @param id 文章Id
+     * @return 浏览量
+     */
+    @GetMapping("/addBrowserAmount/{id}")
+    ResponseVO<Integer> addBrowserAmount(@PathVariable int id) {
+        Integer integer = articleService.addBrowserAmount(id);
+        return integer >= 0
+                ? new ResponseVO<Integer>(Status.SUCCESS, "browser successfully", integer)
+                : new ResponseVO<Integer>(Status.ERROR, "browser error", integer);
+    }
+
+    /**
+     * 取消收藏
+     * @param id 用戶文章id
+     * @return 收藏量
+     */
+    @GetMapping("/cancelStarAmount/{id}")
+    ResponseVO<Integer> cancelStarAmount(@PathVariable int id) {
+        Integer integer = articleService.cancelStarAmount(id);
+        return integer >= 0
+                ? new ResponseVO<Integer>(Status.SUCCESS, "like successfully", integer)
+                : new ResponseVO<Integer>(Status.ERROR, "like error", integer);
+    }
+    /**
      * 取消点赞量
      * @param id 文章Id
      * @return  返回参数
@@ -193,4 +231,21 @@ public class ArticleController {
                 ? new ResponseVO<>(Status.SUCCESS,"Asc successfully", article)
                 : new ResponseVO<>(Status.SUCCESS,"Asc successfully", article);
     }
+
+    /**
+     * 按照页表展示关注人推出的问题
+     * @param userId 用户Id
+     * @param page  页数
+     * @param size  大小
+     * @return
+     */
+    @GetMapping("/follow/{userId}")
+    ResponseVO<List<Article>> articleFollower(@PathVariable int userId, @RequestParam("page") int page,
+                                                  @RequestParam("size") int size){
+        List<Article> articleList = articleService.showArticle(userId, page, size);
+        return articleList != null
+                ? new ResponseVO<>(Status.SUCCESS,"Asc successfully", articleList)
+                : new ResponseVO<>(Status.SUCCESS,"Asc successfully", articleList);
+    }
+
 }

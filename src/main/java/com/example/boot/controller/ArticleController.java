@@ -81,9 +81,9 @@ public class ArticleController {
     }
 
     /**
-     * 展示一系列文章实体
+     * 获取所有文章
      *
-     * @return 一系列文章
+     * @return ResponseVO<List<Article>>文章数组
      */
     @GetMapping("/list")
     ResponseVO<List<Article>> listArticle() {
@@ -94,9 +94,9 @@ public class ArticleController {
     }
 
     /**
-     * 按照文章热度排名
+     * 获取按照热度排名后的所有文章
      *
-     * @return 一系列文章
+     * @return ResponseVO<List<Article>> 文章数组
      */
 //    @GetMapping("/list/hot")
     ResponseVO<List<Article>> listArticleByHot() {

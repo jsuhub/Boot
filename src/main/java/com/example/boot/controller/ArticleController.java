@@ -1,5 +1,6 @@
 package com.example.boot.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.boot.pojo.entity.Article;
@@ -106,11 +107,12 @@ public class ArticleController {
     }
 
     @GetMapping("/list/hot")
-    ResponseVO<List<Article>> listArticleByHotPage(
-            @RequestParam("page") int page,
-            @RequestParam("size") int size) {
+    ResponseVO<List<Article>> listArticleByHotPage(@RequestParam("page") int page, @RequestParam("size") int size) {
+
         IPage iPage = new Page(page, size);
-        IPage page1 = articleService.page(iPage, null);
+        QueryWrapper<Article> articleQueryWrapper = new QueryWrapper<>();
+        articleQueryWrapper.eq("tag", "rear-end");
+        IPage page1 = articleService.page(iPage, articleQueryWrapper);
         List records = page1.getRecords();
         return records != null
                 ? new ResponseVO<List<Article>>(Status.SUCCESS, "list a user", records)
@@ -176,9 +178,18 @@ public class ArticleController {
     }
 
 
-
     @GetMapping("/list/{page}/{size}")
     ResponseVO<List> listArticleByPage(@PathVariable int page, @PathVariable int size) {
+        IPage iPage = new Page(page, size);
+        IPage page1 = articleService.page(iPage, null);
+        List records = page1.getRecords();
+        return page1 != null
+                ? new ResponseVO<>(Status.SUCCESS, "list articles", records)
+                : new ResponseVO<>(Status.ERROR, "list articles", records);
+    }
+
+    @GetMapping("/list/page")
+    ResponseVO<List> listArticleByPageQ(@RequestParam("page") int page, @RequestParam("size") int size) {
         IPage iPage = new Page(page, size);
         IPage page1 = articleService.page(iPage, null);
         List records = page1.getRecords();

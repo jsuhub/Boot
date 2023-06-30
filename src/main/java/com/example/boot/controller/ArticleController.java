@@ -94,24 +94,53 @@ public class ArticleController {
     }
 
     /**
-     * 获取按照热度排名后的所有文章
+     * 获取按照热度排名后的所有文章+分页
      *
      * @return ResponseVO<List<Article>> 文章数组
      */
-//    @GetMapping("/list/hot")
-    ResponseVO<List<Article>> listArticleByHot() {
-        List<Article> articleList = articleService.articleListByHot();
-        return articleList != null
-                ? new ResponseVO<List<Article>>(Status.SUCCESS, "list a user", articleList)
-                : new ResponseVO<List<Article>>(Status.ERROR, "list a user", articleList);
-    }
-
     @GetMapping("/list/hot")
     ResponseVO<List<Article>> listArticleByHotPage(@RequestParam("page") int page, @RequestParam("size") int size) {
-
         IPage iPage = new Page(page, size);
         QueryWrapper<Article> articleQueryWrapper = new QueryWrapper<>();
         articleQueryWrapper.eq("tag", "rear-end");
+        IPage page1 = articleService.page(iPage, articleQueryWrapper);
+        List records = page1.getRecords();
+        return records != null
+                ? new ResponseVO<List<Article>>(Status.SUCCESS, "list a user", records)
+                : new ResponseVO<List<Article>>(Status.ERROR, "list a user", records);
+    }
+
+    /**
+     * 获取按照发布时间降序排序后的所有文章+分页
+     *
+     * @param page 页数
+     * @param size 数据条数
+     * @return ResponseVO<List<Article>> 文章数组
+     */
+    @GetMapping("/list/latest")
+    ResponseVO<List<Article>> listArticleForLatest(@RequestParam("page") int page, @RequestParam("size") int size) {
+        IPage iPage = new Page(page, size);
+        QueryWrapper<Article> articleQueryWrapper = new QueryWrapper<>();
+        articleQueryWrapper.orderByDesc("publish_date");
+        IPage page1 = articleService.page(iPage, articleQueryWrapper);
+        List records = page1.getRecords();
+        return records != null
+                ? new ResponseVO<List<Article>>(Status.SUCCESS, "list a user", records)
+                : new ResponseVO<List<Article>>(Status.ERROR, "list a user", records);
+    }
+
+    /**
+     * 获取根据热度排序后的所有文章+分页
+     *
+     * @param page 页数
+     * @param size 数据条数
+     * @return ResponseVO<List<Article>> 文章数组
+     */
+    @GetMapping("/list/hot")
+    ResponseVO<List<Article>> listArticleByHot(@RequestParam("page") int page, @RequestParam("size") int size) {
+        IPage iPage = new Page(page, size);
+        QueryWrapper<Article> articleQueryWrapper = new QueryWrapper<>();
+        articleQueryWrapper.orderByDesc("hot");
         IPage page1 = articleService.page(iPage, articleQueryWrapper);
         List records = page1.getRecords();
         return records != null

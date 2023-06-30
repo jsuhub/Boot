@@ -13,10 +13,12 @@ import com.example.boot.pojo.entity.Article;
 import com.example.boot.pojo.entity.Follow;
 import com.example.boot.pojo.entity.Question;
 import com.example.boot.service.IArticleService;
+import org.apache.ibatis.annotations.Select;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -55,8 +57,14 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
      * @param time 时间
      * @return 返回排序后的所有文章
      */
-    public List<Article> returnArticleToWebByweighRatio(String time){
-        return articleMapper.getArticleByTimeAndHot(time);
+    public List<Article> returnArticleToWebByweighRatio(String time,int page,int size){
+        Page<Article> articlePage = new Page<>(page, size);
+        QueryWrapper<Article> queryWrapper = new QueryWrapper<>();
+        //@Select("select * from tb_article where publish_date like #{time} order by weigh_ratio desc")
+       queryWrapper.like("publish_date",time);
+       queryWrapper.orderByDesc("weigh_ratio");
+        IPage<Article> page1 = articleMapper.selectPage(articlePage, queryWrapper);
+        return   page1.getRecords();
     }
 
     /**
@@ -158,6 +166,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         return amount;
     }
 
+
     /**
      * 取消收藏
      * @param id 文章Id
@@ -178,18 +187,24 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
      * @param userId 本地用户Id
      * @return 关注人的文章数组
      */
-    public  List<Article> showArticle(int userId) {
+    public  List<Article> showArticle(int userId ,int page,int size) {
         List<Follow> follows = followMapper.showUser(userId);
-        List<Article>  articles=null;
+        System.out.println(follows);
+        List<Article>  articles=new ArrayList<>();
         for (int i = 0; i < follows.size(); i++)
         {
-            List<Article> articles1 = articleMapper.articleByUserId(follows.get(i).getUserId());
+            List<Article> articles1 = articleMapper.articleByUserId(follows.get(i).getUser1Id());
                for (int j=0;j<articles1.size();j++)
                {
                 articles.add(articles1.get(j));
                }
         }
-        return articles;
+        List<Article> articles2=new ArrayList<>();
+        for (int i=page;i<page+size;i++)
+        {
+            articles2.add(articles.get(i));
+        }
+        return articles2;
     }
 
     /**

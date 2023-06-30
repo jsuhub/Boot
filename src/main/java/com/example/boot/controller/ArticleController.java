@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.boot.pojo.entity.Article;
-import com.example.boot.pojo.entity.Question;
 import com.example.boot.pojo.vo.RequestVO;
 import com.example.boot.pojo.vo.ResponseVO;
 import com.example.boot.constant.Status;
@@ -12,7 +11,6 @@ import com.example.boot.service.impl.ArticleServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -27,7 +25,7 @@ public class ArticleController {
      * 插入文章
      *
      * @param articleRequestVO 文章的请求参数
-     * @return true/false
+     * @return ResponseVO<Boolean> 是否插入成功
      */
     @PostMapping
     ResponseVO<Boolean> saveArticle(@RequestBody RequestVO<Article> articleRequestVO) {
@@ -42,7 +40,7 @@ public class ArticleController {
      * 删除文章
      *
      * @param id 文章id
-     * @return true/false
+     * @return ResponseVO<Boolean> 是否删除成功
      */
     @DeleteMapping("/{id}")
     ResponseVO<Boolean> removeArticleById(@PathVariable int id) {
@@ -53,10 +51,10 @@ public class ArticleController {
     }
 
     /**
-     * 增加文章
+     * 修改文章
      *
      * @param articleRequestVO 请求体参数
-     * @return true/false
+     * @return ResponseVO<Boolean> 是否修改成功
      */
     @PutMapping
     ResponseVO<Boolean> updateArticle(@RequestBody RequestVO<Article> articleRequestVO) {
@@ -65,6 +63,7 @@ public class ArticleController {
                 ? new ResponseVO<Boolean>(Status.SUCCESS, "update ok", update)
                 : new ResponseVO<Boolean>(Status.ERROR, "update error", update);
     }
+
 
     /**
      * 得到文章内容
@@ -98,7 +97,7 @@ public class ArticleController {
      *
      * @return ResponseVO<List<Article>> 文章数组
      */
-    @GetMapping("/list/hot")
+//    @GetMapping("/list/hot")
     ResponseVO<List<Article>> listArticleByHotPage(@RequestParam("page") int page, @RequestParam("size") int size) {
         IPage iPage = new Page(page, size);
         QueryWrapper<Article> articleQueryWrapper = new QueryWrapper<>();

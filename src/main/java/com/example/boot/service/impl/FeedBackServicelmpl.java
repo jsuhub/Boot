@@ -12,8 +12,5 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class FeedBackServicelmpl  extends ServiceImpl<FeedBackMapper, FeedBack> implements IFeedBackService {
-    @Autowired
-    FeedBackMapper feedBackMapper;
-
 
 }

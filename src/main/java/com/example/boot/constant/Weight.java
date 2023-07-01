@@ -12,7 +12,7 @@ package com.example.boot.constant;
  */
 public class Weight {
     public static final Integer LIKE = 3;
-    public static final Integer STAR = 3;
-    public static final Integer BROWSER = 3;
+    public static final Integer STAR = 2;
+    public static final Integer BROWSER = 1;
 
 }

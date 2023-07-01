@@ -1,4 +1,5 @@
 package com.example.boot.controller;
+
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -12,6 +13,7 @@ import com.example.boot.service.impl.ArticleServiceImpl;
 import com.example.boot.service.impl.QuestionServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 import java.util.List;
@@ -32,15 +34,15 @@ public class QuestionController {
      * @return Boolean 布尔值 是否插入成功
      */
     @PostMapping
-    ResponseVO<Boolean> saveQuestion(@RequestBody RequestVO<Question> articleRequestVO) {
-        boolean saveArticle = questionService.save(articleRequestVO.getData());
-        return saveArticle
-                ? new ResponseVO<>(Status.SUCCESS, StatusInfo.SAVE_INFO_SUCCESS, saveArticle)
-                : new ResponseVO<>(Status.ERROR, StatusInfo.SAVE_INFO_FAILED, saveArticle);
+    ResponseVO<Boolean> saveQuestion(@RequestBody RequestVO<Question> questionRequestVO) {
+        boolean saveQuestion = questionService.save(questionRequestVO.getData());
+        return saveQuestion
+                ? new ResponseVO<>(Status.SUCCESS, StatusInfo.SAVE_INFO_SUCCESS, saveQuestion)
+                : new ResponseVO<>(Status.ERROR, StatusInfo.SAVE_INFO_FAILED, saveQuestion);
     }
 
     /**
-     * 通过id删除问题
+     * 根据id删除问题
      *
      * @param id 问题id
      * @return Boolean 布尔值 是否删除成功
@@ -51,6 +53,7 @@ public class QuestionController {
         return removeQuestion
                 ? new ResponseVO<>(Status.SUCCESS, StatusInfo.REMOVE_INFO_SUCCESS, removeQuestion)
                 : new ResponseVO<>(Status.ERROR, StatusInfo.REMOVE_INFO_FAILED, removeQuestion);
+
     }
 
     /**
@@ -177,5 +180,4 @@ public class QuestionController {
                 ? new ResponseVO<List<Question>>(Status.SUCCESS, "list a user", records)
                 : new ResponseVO<List<Question>>(Status.ERROR, "list a user", records);
     }
-
 }

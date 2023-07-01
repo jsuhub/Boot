@@ -125,7 +125,7 @@ public class ArticleController {
      * @return List<Article> 文章数组
      */
     @GetMapping("/list/feature")
-    ResponseVO<List<Article>> listArticleByHot(@RequestParam("page") int page, @RequestParam("size") int size) {
+    ResponseVO<List<Article>> listFeatureArticleByPage(@RequestParam("page") int page, @RequestParam("size") int size) {
         IPage iPage = new Page(page, size);
         QueryWrapper<Article> articleQueryWrapper = new QueryWrapper<>();
         articleQueryWrapper.orderByDesc("hot");
@@ -145,7 +145,7 @@ public class ArticleController {
      * @return List<Article> 文章数组
      */
     @GetMapping("/list/latest")
-    ResponseVO<List<Article>> listArticleForLatest(@RequestParam("page") int page, @RequestParam("size") int size) {
+    ResponseVO<List<Article>> listLatestArticleByPage(@RequestParam("page") int page, @RequestParam("size") int size) {
         IPage iPage = new Page(page, size);
         QueryWrapper<Article> articleQueryWrapper = new QueryWrapper<>();
         articleQueryWrapper.orderByDesc("publish_date");
@@ -165,7 +165,7 @@ public class ArticleController {
      * @return List<Article> 文章数组
      */
     @GetMapping("/list/hot/{date}")
-    ResponseVO<List<Article>> listArticleHotAndDate(@PathVariable String date, @RequestParam("page") int page,
+    ResponseVO<List<Article>> listHotArticleByPage(@PathVariable String date, @RequestParam("page") int page,
                                                     @RequestParam("size") int size) {
         IPage iPage = new Page(page, size);
         QueryWrapper<Article> articleQueryWrapper = new QueryWrapper<>();
@@ -173,9 +173,6 @@ public class ArticleController {
         articleQueryWrapper.like("publish_date", date + "%");
         IPage hotPage = articleService.page(iPage, articleQueryWrapper);
         List records = hotPage.getRecords();
-
-        System.out.println(records);
-
         return records != null
                 ? new ResponseVO<List<Article>>(Status.SUCCESS, "list a user", records)
                 : new ResponseVO<List<Article>>(Status.ERROR, "list a user", records);
@@ -209,7 +206,7 @@ public class ArticleController {
      * @return
      */
     @GetMapping("/list/{tag}/feature")
-    ResponseVO<List<Article>> listFeatureArticleByTag(@PathVariable String tag,@RequestParam("page") int page,
+    ResponseVO<List<Article>> listFeatureArticleByTagAndPage(@PathVariable String tag,@RequestParam("page") int page,
                                                      @RequestParam("size") int size) {
         IPage iPage = new Page(page, size);
         QueryWrapper<Article> articleQueryWrapper = new QueryWrapper<>();
@@ -230,7 +227,7 @@ public class ArticleController {
      * @return
      */
     @GetMapping("/list/{tag}/latest")
-    ResponseVO<List<Article>> listLatestArticleByTag(@PathVariable String tag, @RequestParam("page") int page,
+    ResponseVO<List<Article>> listLatestArticleByTagAndPage(@PathVariable String tag, @RequestParam("page") int page,
                                                   @RequestParam("size") int size) {
         IPage iPage = new Page(page, size);
         QueryWrapper<Article> articleQueryWrapper = new QueryWrapper<>();
@@ -251,7 +248,7 @@ public class ArticleController {
      * @return
      */
     @GetMapping("/list/{tag}/hot/{date}")
-    ResponseVO<List<Article>> listArticleByTagAndHot(@PathVariable String tag, @PathVariable String date,
+    ResponseVO<List<Article>> listHotArticleByTagAndPage(@PathVariable String tag, @PathVariable String date,
                                                      @RequestParam("page") int page,
                                                         @RequestParam("size") int size) {
         IPage iPage = new Page(page, size);

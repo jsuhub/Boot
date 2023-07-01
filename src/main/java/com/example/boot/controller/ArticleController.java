@@ -186,12 +186,31 @@ public class ArticleController {
      * @param size 数据条数
      * @return
      */
-    @GetMapping("/list/tag")
-    ResponseVO<List<Article>> articleTagSelectAll(@RequestParam("page") int page,
+    @GetMapping("/list/tag/{tag}")
+    ResponseVO<List<Article>> listArticleByTag(@PathVariable String tag, @RequestParam("page") int page,
                                                   @RequestParam("size") int size) {
-        return null != null
-                ? new ResponseVO<>(Status.SUCCESS, "Asc successfully", null)
-                : new ResponseVO<>(Status.SUCCESS, "Asc successfully", null);
+        IPage iPage = new Page(page, size);
+        QueryWrapper<Article> articleQueryWrapper = new QueryWrapper<>();
+        articleQueryWrapper.eq("tag", tag);
+        IPage<Article> tagPage = articleService.page(iPage, articleQueryWrapper);
+        List<Article> records = tagPage.getRecords();
+        return records != null
+                ? new ResponseVO<>(Status.SUCCESS, "Asc successfully", records)
+                : new ResponseVO<>(Status.SUCCESS, "Asc successfully", records);
+    }
+
+    @GetMapping("/list/tag/latest")
+    ResponseVO<List<Article>> listArticleByTagAndLatest(@PathVariable String tag, @RequestParam("page") int page,
+                                                  @RequestParam("size") int size) {
+        IPage iPage = new Page(page, size);
+        QueryWrapper<Article> articleQueryWrapper = new QueryWrapper<>();
+        articleQueryWrapper.eq("tag", tag);
+        articleQueryWrapper.orderByAsc("publish_date");
+        IPage<Article> tagPage = articleService.page(iPage, articleQueryWrapper);
+        List<Article> records = tagPage.getRecords();
+        return records != null
+                ? new ResponseVO<>(Status.SUCCESS, "Asc successfully", records)
+                : new ResponseVO<>(Status.SUCCESS, "Asc successfully", records);
     }
 
 }

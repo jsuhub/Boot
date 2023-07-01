@@ -2,7 +2,6 @@ package com.example.boot.pojo.entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
-import org.springframework.http.converter.json.GsonBuilderUtils;
 
 @Data
 public class Article {

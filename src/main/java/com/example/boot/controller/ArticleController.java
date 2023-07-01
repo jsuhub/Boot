@@ -26,7 +26,7 @@ public class ArticleController {
      * 插入文章
      *
      * @param articleRequestVO 文章的请求参数
-     * @return ResponseVO<Boolean> 是否插入成功
+     * @return Boolean 布尔值 是否插入成功
      */
     @PostMapping
     ResponseVO<Boolean> saveArticle(@RequestBody RequestVO<Article> articleRequestVO) {
@@ -40,7 +40,7 @@ public class ArticleController {
      * 通过id删除文章
      *
      * @param id 文章id
-     * @return ResponseVO<Boolean> 布尔值 是否删除成功
+     * @return Boolean 布尔值 是否删除成功
      */
     @DeleteMapping("/{id}")
     ResponseVO<Boolean> removeArticleById(@PathVariable int id) {
@@ -54,7 +54,7 @@ public class ArticleController {
      * 修改文章信息
      *
      * @param articleRequestVO 请求体参数
-     * @return ResponseVO<Boolean> 布尔值 是否修改成功
+     * @return Boolean 布尔值 是否修改成功
      */
     @PutMapping
     ResponseVO<Boolean> updateArticle(@RequestBody RequestVO<Article> articleRequestVO) {
@@ -69,7 +69,7 @@ public class ArticleController {
      * 通过id查询一篇文章
      *
      * @param id 文章id
-     * @return ResponseVO<Article> 文章实体
+     * @return Article 单篇文章
      */
     @GetMapping("/{id}")
     ResponseVO<Article> getArticleById(@PathVariable int id) {
@@ -82,7 +82,7 @@ public class ArticleController {
     /**
      * 获取所有文章
      *
-     * @return ResponseVO<List<Article>> 文章数组
+     * @return List<Article> 文章数组
      */
     @GetMapping("/list")
     ResponseVO<List<Article>> listArticle() {
@@ -97,7 +97,7 @@ public class ArticleController {
      *
      * @param page 页数
      * @param size 数据条数
-     * @return ResponseVO<List<Article>> 文章数组
+     * @return List<Article> 文章数组
      */
     @GetMapping("/list/latest")
     ResponseVO<List<Article>> listArticleForLatest(@RequestParam("page") int page, @RequestParam("size") int size) {
@@ -116,35 +116,37 @@ public class ArticleController {
      *
      * @param page 页数
      * @param size 数据条数
-     * @return ResponseVO<List<Article>> 文章数组
+     * @return List<Article> 文章数组
      */
     @GetMapping("/list/feature")
     ResponseVO<List<Article>> listArticleByHot(@RequestParam("page") int page, @RequestParam("size") int size) {
         IPage iPage = new Page(page, size);
         QueryWrapper<Article> articleQueryWrapper = new QueryWrapper<>();
         articleQueryWrapper.orderByDesc("hot");
-        IPage page1 = articleService.page(iPage, articleQueryWrapper);
-        List records = page1.getRecords();
+        IPage featurePage = articleService.page(iPage, articleQueryWrapper);
+        List records = featurePage.getRecords();
         return records != null
-                ? new ResponseVO<>(Status.SUCCESS, "list a user", records)
-                : new ResponseVO<>(Status.ERROR, "list a user", records);
+                ? new ResponseVO<List<Article>>(Status.SUCCESS, "list a user", records)
+                : new ResponseVO<List<Article>>(Status.ERROR, "list a user", records);
     }
 
     /**
      * 获取根据热度排序后的当天所有文章+分页
-     * @param time 日期
-     * @param page  已经展示文章的数量
-     * @param size  返回文章的大小
-     * @return 一系列文章
+     * @param date 日期
+     * @param page 页数
+     * @param size 数据条数
+     * @return List<Article> 文章数组
      */
-    @GetMapping("/list/hot/{time}")
-    ResponseVO<List<Article>> returnArticleToWebByweighRatio(@PathVariable String time,@RequestParam("page") int page,
+    @GetMapping("/list/hot/{date}")
+    ResponseVO<List<Article>> listArticleHotAndDate (@PathVariable String date,@RequestParam("page") int page,
                                                              @RequestParam("size") int size){
+
+
         //“2023-6-28-17-51-23”   //查这天的所有文章，根据这天文章的权重返回排序后的文章集合
-        List<Article> articles = articleService.returnArticleToWebByweighRatio(articleService.timeFormat(time),page,size);
+        List<Article> articles = articleService.returnArticleToWebByweighRatio(articleService.timeFormat(date),page,size);
         return articles != null
-                ? new ResponseVO<List<Article>>(Status.SUCCESS, "desc successfully", articles)
-                : new ResponseVO<List<Article>>(Status.ERROR, "desc error", articles);
+                ? new ResponseVO<>(Status.SUCCESS, "desc successfully", articles)
+                : new ResponseVO<>(Status.ERROR, "desc error", articles);
     }
 
     /**

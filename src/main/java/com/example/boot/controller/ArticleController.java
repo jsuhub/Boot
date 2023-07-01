@@ -37,10 +37,10 @@ public class ArticleController {
     }
 
     /**
-     * 删除文章
+     * 通过id删除文章
      *
      * @param id 文章id
-     * @return ResponseVO<Boolean> 是否删除成功
+     * @return ResponseVO<Boolean> 布尔值 是否删除成功
      */
     @DeleteMapping("/{id}")
     ResponseVO<Boolean> removeArticleById(@PathVariable int id) {
@@ -51,62 +51,45 @@ public class ArticleController {
     }
 
     /**
-     * 修改文章
+     * 修改文章信息
      *
      * @param articleRequestVO 请求体参数
-     * @return ResponseVO<Boolean> 是否修改成功
+     * @return ResponseVO<Boolean> 布尔值 是否修改成功
      */
     @PutMapping
     ResponseVO<Boolean> updateArticle(@RequestBody RequestVO<Article> articleRequestVO) {
-        boolean update = articleService.updateById(articleRequestVO.getData());
-        return update
-                ? new ResponseVO<Boolean>(Status.SUCCESS, "update ok", update)
-                : new ResponseVO<Boolean>(Status.ERROR, "update error", update);
+        boolean updateArticle = articleService.updateById(articleRequestVO.getData());
+        return updateArticle
+                ? new ResponseVO<>(Status.SUCCESS, "update ok", updateArticle)
+                : new ResponseVO<>(Status.ERROR, "update error", updateArticle);
     }
 
 
     /**
-     * 得到文章内容
+     * 通过id查询一篇文章
      *
-     * @param id
-     * @return 文章实体
+     * @param id 文章id
+     * @return ResponseVO<Article> 文章实体
      */
     @GetMapping("/{id}")
     ResponseVO<Article> getArticleById(@PathVariable int id) {
         Article article = articleService.getById(id);
         return article != null
-                ? new ResponseVO<Article>(Status.SUCCESS, "get a user", article)
-                : new ResponseVO<Article>(Status.ERROR, "get a user", article);
+                ? new ResponseVO<>(Status.SUCCESS, "get a user", article)
+                : new ResponseVO<>(Status.ERROR, "get a user", article);
     }
 
     /**
      * 获取所有文章
      *
-     * @return ResponseVO<List<Article>>文章数组
+     * @return ResponseVO<List<Article>> 文章数组
      */
     @GetMapping("/list")
     ResponseVO<List<Article>> listArticle() {
         List<Article> articleList = articleService.list();
         return articleList != null
-                ? new ResponseVO<List<Article>>(Status.SUCCESS, "list a user", articleList)
-                : new ResponseVO<List<Article>>(Status.ERROR, "list a user", articleList);
-    }
-
-    /**
-     * 获取按照热度排名后的所有文章+分页
-     *
-     * @return ResponseVO<List<Article>> 文章数组
-     */
-//    @GetMapping("/list/hot")
-    ResponseVO<List<Article>> listArticleByHotPage(@RequestParam("page") int page, @RequestParam("size") int size) {
-        IPage iPage = new Page(page, size);
-        QueryWrapper<Article> articleQueryWrapper = new QueryWrapper<>();
-        articleQueryWrapper.eq("tag", "rear-end");
-        IPage page1 = articleService.page(iPage, articleQueryWrapper);
-        List records = page1.getRecords();
-        return records != null
-                ? new ResponseVO<List<Article>>(Status.SUCCESS, "list a user", records)
-                : new ResponseVO<List<Article>>(Status.ERROR, "list a user", records);
+                ? new ResponseVO<>(Status.SUCCESS, "list a user", articleList)
+                : new ResponseVO<>(Status.ERROR, "list a user", articleList);
     }
 
     /**
@@ -121,8 +104,8 @@ public class ArticleController {
         IPage iPage = new Page(page, size);
         QueryWrapper<Article> articleQueryWrapper = new QueryWrapper<>();
         articleQueryWrapper.orderByDesc("publish_date");
-        IPage page1 = articleService.page(iPage, articleQueryWrapper);
-        List records = page1.getRecords();
+        IPage latestPage = articleService.page(iPage, articleQueryWrapper);
+        List records = latestPage.getRecords();
         return records != null
                 ? new ResponseVO<List<Article>>(Status.SUCCESS, "list a user", records)
                 : new ResponseVO<List<Article>>(Status.ERROR, "list a user", records);
@@ -135,7 +118,7 @@ public class ArticleController {
      * @param size 数据条数
      * @return ResponseVO<List<Article>> 文章数组
      */
-    @GetMapping("/list/hot")
+    @GetMapping("/list/feature")
     ResponseVO<List<Article>> listArticleByHot(@RequestParam("page") int page, @RequestParam("size") int size) {
         IPage iPage = new Page(page, size);
         QueryWrapper<Article> articleQueryWrapper = new QueryWrapper<>();
@@ -143,84 +126,18 @@ public class ArticleController {
         IPage page1 = articleService.page(iPage, articleQueryWrapper);
         List records = page1.getRecords();
         return records != null
-                ? new ResponseVO<List<Article>>(Status.SUCCESS, "list a user", records)
-                : new ResponseVO<List<Article>>(Status.ERROR, "list a user", records);
+                ? new ResponseVO<>(Status.SUCCESS, "list a user", records)
+                : new ResponseVO<>(Status.ERROR, "list a user", records);
     }
 
     /**
-     * 添加喜欢
-     *
-     * @param id 文章Id
-     * @return 返回参数
-     */
-    @GetMapping("/addLikeAmount/{id}")
-    ResponseVO<Integer> addLikeAmount(@PathVariable int id) {
-        Integer integer = articleService.articleLike(id);
-        return integer >= 0
-                ? new ResponseVO<Integer>(Status.SUCCESS, "like successfully", integer)
-                : new ResponseVO<Integer>(Status.ERROR, "like error", integer);
-    }
-
-    /**
-     * 添加收藏量
-     * @param id 文章Id
-     * @return 收藏量
-     */
-    @GetMapping("/addStarAmount/{id}")
-    ResponseVO<Integer> addStarAmount(@PathVariable int id) {
-        Integer integer = articleService.addStarAmount(id);
-        return integer >= 0
-                ? new ResponseVO<Integer>(Status.SUCCESS, "like successfully", integer)
-                : new ResponseVO<Integer>(Status.ERROR, "like error", integer);
-    }
-
-    /**
-     * 添加浏览量
-     * @param id 文章Id
-     * @return 浏览量
-     */
-    @GetMapping("/addBrowserAmount/{id}")
-    ResponseVO<Integer> addBrowserAmount(@PathVariable int id) {
-        Integer integer = articleService.addBrowserAmount(id);
-        return integer >= 0
-                ? new ResponseVO<Integer>(Status.SUCCESS, "browser successfully", integer)
-                : new ResponseVO<Integer>(Status.ERROR, "browser error", integer);
-    }
-
-    /**
-     * 取消收藏
-     * @param id 用戶文章id
-     * @return 收藏量
-     */
-    @GetMapping("/cancelStarAmount/{id}")
-    ResponseVO<Integer> cancelStarAmount(@PathVariable int id) {
-        Integer integer = articleService.cancelStarAmount(id);
-        return integer >= 0
-                ? new ResponseVO<Integer>(Status.SUCCESS, "like successfully", integer)
-                : new ResponseVO<Integer>(Status.ERROR, "like error", integer);
-    }
-    /**
-     * 取消点赞量
-     *
-     * @param id 文章Id
-     * @return 返回参数
-     */
-    @GetMapping("/cancelLikeAmount/{id}")
-    ResponseVO<Integer> cancleLikeAmount(@PathVariable int id) {
-        Integer integer = articleService.cancelArticle(id);
-        return integer >= 0
-                ? new ResponseVO<Integer>(Status.SUCCESS, "cancel successfully", integer)
-                : new ResponseVO<Integer>(Status.ERROR, "cancel error", integer);
-    }
-
-    /**
-     * 根据这天的文章热度返回文章
+     * 获取根据热度排序后的当天所有文章+分页
      * @param time 日期
      * @param page  已经展示文章的数量
      * @param size  返回文章的大小
      * @return 一系列文章
      */
-    @GetMapping("/hotArticle/{time}")
+    @GetMapping("/list/hot/{time}")
     ResponseVO<List<Article>> returnArticleToWebByweighRatio(@PathVariable String time,@RequestParam("page") int page,
                                                              @RequestParam("size") int size){
         //“2023-6-28-17-51-23”   //查这天的所有文章，根据这天文章的权重返回排序后的文章集合
@@ -229,7 +146,6 @@ public class ArticleController {
                 ? new ResponseVO<List<Article>>(Status.SUCCESS, "desc successfully", articles)
                 : new ResponseVO<List<Article>>(Status.ERROR, "desc error", articles);
     }
-
 
     /**
      * 根据文章的id计算该文章的权重(热度)

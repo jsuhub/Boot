@@ -95,50 +95,8 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     }
 
 
-    /**
-     * 添加文章喜欢
-     *
-     * @param id 文章Id
-     * @return 文章喜欢量
-     */
-    public Integer articleLike(int id) {
-        Article article = articleMapper.selectById(id);
-        int amount = article.getLikeAmount();
-        amount++;
-        article.setLikeAmount(amount);
-        articleMapper.updateById(article);
-        return amount;
-    }
 
-    /**
-     * 添加文章收藏
-     *
-     * @param id 文章Id
-     * @return 文章收藏量
-     */
-    public Integer addStarAmount(int id) {
-        Article article = articleMapper.selectById(id);
-        int amount = article.getStarAmount();
-        amount++;
-        article.setStarAmount(amount);
-        articleMapper.updateById(article);
-        return amount;
-    }
 
-    /**
-     * 添加游览量
-     *
-     * @param id 文章Id
-     * @return 浏览量
-     */
-    public Integer addBrowserAmount(int id) {
-        Article article = articleMapper.selectById(id);
-        int amount = article.getBrowserAmount();
-        amount++;
-        article.setBrowserAmount(amount);
-        articleMapper.updateById(article);
-        return amount;
-    }
 
     /**
      * 按照热度排序

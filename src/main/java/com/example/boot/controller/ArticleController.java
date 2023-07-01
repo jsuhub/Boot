@@ -59,11 +59,17 @@ public class ArticleController {
     @PutMapping
     ResponseVO<Boolean> updateArticle(@RequestBody RequestVO<Article> articleRequestVO) {
         boolean updateArticle = articleService.updateById(articleRequestVO.getData());
+
+        Boolean setHotBoolean = articleService.computeHot(articleRequestVO.getData().getId());
+
+        if (!setHotBoolean) {
+            return new ResponseVO<>(Status.ERROR, "update error", setHotBoolean);
+        }
+
         return updateArticle
                 ? new ResponseVO<>(Status.SUCCESS, "update ok", updateArticle)
                 : new ResponseVO<>(Status.ERROR, "update error", updateArticle);
     }
-
 
     /**
      * 通过id查询一篇文章
@@ -90,6 +96,24 @@ public class ArticleController {
         return articleList != null
                 ? new ResponseVO<>(Status.SUCCESS, "list a user", articleList)
                 : new ResponseVO<>(Status.ERROR, "list a user", articleList);
+    }
+
+    /**
+     * 获取所有文章+分页
+     *
+     * @param page 页数
+     * @param size 数据条数
+     * @return List
+     */
+    @GetMapping("/list/page")
+    ResponseVO<List<Article>> listArticleByPage(@RequestParam("page") int page, @RequestParam("size") int size) {
+        IPage iPage = new Page(page, size);
+        QueryWrapper<Article> articleQueryWrapper = new QueryWrapper<>();
+        IPage listPage = articleService.page(iPage, articleQueryWrapper);
+        List records = listPage.getRecords();
+        return listPage != null
+                ? new ResponseVO<List<Article>>(Status.SUCCESS, "list articles", records)
+                : new ResponseVO<List<Article>>(Status.ERROR, "list articles", records);
     }
 
     /**
@@ -131,101 +155,43 @@ public class ArticleController {
     }
 
     /**
-     * 获取根据热度排序后的当天所有文章+分页
+     * 获取当天根据热度排序后的所有文章+分页
+     *
      * @param date 日期
      * @param page 页数
      * @param size 数据条数
      * @return List<Article> 文章数组
      */
     @GetMapping("/list/hot/{date}")
-    ResponseVO<List<Article>> listArticleHotAndDate (@PathVariable String date,@RequestParam("page") int page,
-                                                             @RequestParam("size") int size){
+    ResponseVO<List<Article>> listArticleHotAndDate(@PathVariable String date, @RequestParam("page") int page,
+                                                    @RequestParam("size") int size) {
+        IPage iPage = new Page(page, size);
+        QueryWrapper<Article> articleQueryWrapper = new QueryWrapper<>();
+        articleQueryWrapper.orderByDesc("hot");
+        articleQueryWrapper.like("publish_date", date + "%");
+        IPage hotPage = articleService.page(iPage, articleQueryWrapper);
+        List records = hotPage.getRecords();
 
+        System.out.println(records);
 
-        //“2023-6-28-17-51-23”   //查这天的所有文章，根据这天文章的权重返回排序后的文章集合
-        List<Article> articles = articleService.returnArticleToWebByweighRatio(articleService.timeFormat(date),page,size);
-        return articles != null
-                ? new ResponseVO<>(Status.SUCCESS, "desc successfully", articles)
-                : new ResponseVO<>(Status.ERROR, "desc error", articles);
+        return records != null
+                ? new ResponseVO<List<Article>>(Status.SUCCESS, "list a user", records)
+                : new ResponseVO<List<Article>>(Status.ERROR, "list a user", records);
     }
 
     /**
-     * 根据文章的id计算该文章的权重(热度)
+     * 根据标签获取所有文章+分页
      *
-     * @param id 文章的唯一标识
-     * @return ResponseVO<Boolean> 响应数据实体
-     */
-    @GetMapping("/compute/{id}")
-    ResponseVO<Boolean> computeWeighRatio(@PathVariable int id) {
-        Boolean aBoolean = articleService.computeWeighRatio(id);
-        return aBoolean
-                ? new ResponseVO<Boolean>(Status.SUCCESS, "compute successfully", aBoolean)
-                : new ResponseVO<Boolean>(Status.ERROR, "compute weigh Ratio fail", aBoolean);
-    }
-
-
-    @GetMapping("/list/{page}/{size}")
-    ResponseVO<List> listArticleByPage(@PathVariable int page, @PathVariable int size) {
-        IPage iPage = new Page(page, size);
-        IPage page1 = articleService.page(iPage, null);
-        List records = page1.getRecords();
-        return page1 != null
-                ? new ResponseVO<>(Status.SUCCESS, "list articles", records)
-                : new ResponseVO<>(Status.ERROR, "list articles", records);
-    }
-
-    @GetMapping("/list/page")
-    ResponseVO<List> listArticleByPageQ(@RequestParam("page") int page, @RequestParam("size") int size) {
-        IPage iPage = new Page(page, size);
-        IPage page1 = articleService.page(iPage, null);
-        List records = page1.getRecords();
-        return page1 != null
-                ? new ResponseVO<>(Status.SUCCESS, "list articles", records)
-                : new ResponseVO<>(Status.ERROR, "list articles", records);
-    }
-
-    /**
-     * 根据文章的标签返回一系列文章
-     * @param articleTag 文章标签
-     * @param page 返回的跳转页数
-     * @param size 页数大小
+     * @param page 页数
+     * @param size 数据条数
      * @return
      */
-    @GetMapping("/search/{articleTag}")
-    ResponseVO<List<Article>> articleTagSelectAll(@PathVariable String articleTag, @RequestParam("page") int page,
+    @GetMapping("/list/tag")
+    ResponseVO<List<Article>> articleTagSelectAll(@RequestParam("page") int page,
                                                   @RequestParam("size") int size) {
-//        List<Article> articleList = articleService.listByArticleTag(articleTag, page, size);
         return null != null
                 ? new ResponseVO<>(Status.SUCCESS, "Asc successfully", null)
                 : new ResponseVO<>(Status.SUCCESS, "Asc successfully", null);
-    }
-
-    /**
-     * 根据时间降序返回当前库中所有的文章
-     *
-     * @return ResponseVO<List < Article>> 响应数据实体
-     */
-    @GetMapping("/timeArticle")
-    ResponseVO<List<Article>> returnArticleByTimeAsc() {
-        List<Article> article = articleService.returnArticleByTimeDesc();
-        return article != null
-                ? new ResponseVO<>(Status.SUCCESS, "Asc successfully", article)
-                : new ResponseVO<>(Status.SUCCESS, "Asc successfully", article);
-    }
-
-    /**
-     * 按照页表展示关注人推出的问题
-     * @param userId 用户Id
-     * @param page  页数
-     * @param size  大小
-     * @return
-     */
-    @GetMapping("/follow/{userId}")
-    ResponseVO<List<Article>> articleFollower(@PathVariable int userId, @RequestParam("page") int page,
-                                                  @RequestParam("size") int size){
-        return null == null
-                ? new ResponseVO<>(Status.SUCCESS,"Asc successfully", null)
-                : new ResponseVO<>(Status.SUCCESS,"Asc successfully", null);
     }
 
 }

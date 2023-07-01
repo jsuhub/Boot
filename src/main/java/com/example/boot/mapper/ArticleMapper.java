@@ -31,12 +31,12 @@ public interface ArticleMapper extends BaseMapper<Article> {
     @Update("update tb_article set weigh_ratio=#{weigh_ratio} where id=#{id}")
     Integer updateWeighRatio(@Param("id") int id, @Param("weigh_ratio") int weigh_ratio);
 
-    /**
-     * 根据发布时间降序查询文章
-     * @return 降序查询后的所有文章
-     */
-    @Select("select * from tb_article order by publish_date desc")
-    List<Article> getArticleByTimeDesc();
+//    /**
+//     * 根据发布时间降序查询文章
+//     * @return 降序查询后的所有文章
+//     */
+//    @Select("select * from tb_article order by publish_date desc")
+//    List<Article> getArticleByTimeDesc();
 
     @Select("select * from tb_article limit #{page}, #{pageSize}")
     List<Article> selectByMyPage (int page, int pageSize);

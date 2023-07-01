@@ -9,11 +9,6 @@ import java.util.List;
 
 public interface IArticleService extends IService<Article> {
 
-    public Boolean computeWeighRatio(int id);
-  
-    public List<Article> returnArticleToWebByweighRatio(String time,int page,int size);
+    public Boolean computeHot(int id);
 
-    public List<Article> returnArticleByTimeDesc();
-
-    List<Article> articleListByHotPage(int page, int size);
 }

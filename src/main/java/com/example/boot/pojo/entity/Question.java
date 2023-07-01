@@ -25,4 +25,6 @@ public class Question {
 
         private boolean state;
 
+        Integer hot;
+
 }

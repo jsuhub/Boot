@@ -11,10 +11,7 @@ import java.util.List;
 
 public interface IQuestionService extends IService<Question> {
 
-    public Boolean computeWeighRatio(int id);
 
-    public List<Question> returnQuestionToWebByWeighRatio(String time);
-
-    public List<Question> returnQuestionByTimeAsc();  //根据时间降序返回问题集合
+    public Boolean computeHot(int id) ;
 
 }

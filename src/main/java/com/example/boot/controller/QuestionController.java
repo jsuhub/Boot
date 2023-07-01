@@ -1,11 +1,15 @@
 package com.example.boot.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.boot.constant.Status;
 import com.example.boot.constant.StatusInfo;
 import com.example.boot.pojo.entity.Article;
 import com.example.boot.pojo.entity.Question;
 import com.example.boot.pojo.vo.RequestVO;
 import com.example.boot.pojo.vo.ResponseVO;
+import com.example.boot.service.impl.ArticleServiceImpl;
 import com.example.boot.service.impl.QuestionServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -19,13 +23,14 @@ import java.util.List;
 @RequestMapping("/questions")
 public class QuestionController {
 
+
     @Autowired
     private QuestionServiceImpl questionService;
 
     /**
-     * 新增一个问题
+     * 插入问题
      *
-     * @param questionRequestVO 问题的请求参数
+     * @param articleRequestVO 问题的请求参数
      * @return Boolean 布尔值 是否插入成功
      */
     @PostMapping
@@ -43,80 +48,136 @@ public class QuestionController {
      * @return Boolean 布尔值 是否删除成功
      */
     @DeleteMapping("/{id}")
-    ResponseVO<Boolean> removeQuestion(@PathVariable int id) {
-        boolean remove = questionService.removeById(id);
-        return remove
-                ? new ResponseVO<Boolean>(Status.SUCCESS, "remove ok", remove)
-                : new ResponseVO<>(Status.ERROR, "remove error", remove);
+    ResponseVO<Boolean> removeQuestionById(@PathVariable int id) {
+        boolean removeQuestion = questionService.removeById(id);
+        return removeQuestion
+                ? new ResponseVO<>(Status.SUCCESS, StatusInfo.REMOVE_INFO_SUCCESS, removeQuestion)
+                : new ResponseVO<>(Status.ERROR, StatusInfo.REMOVE_INFO_FAILED, removeQuestion);
+
     }
 
     /**
      * 修改问题
      *
-     * @param questionResponseVO 请求数据实体
-     * @return ResponseVO<Boolean> 响应数据实体
+     * @param questionRequestVO 请求体参数
+     * @return Boolean 布尔值 是否修改成功
      */
     @PutMapping
-    ResponseVO<Boolean> updateQuestion(@RequestBody ResponseVO<Question> questionResponseVO) {
-        boolean update = questionService.updateById(questionResponseVO.getData());
-        return update
-                ? new ResponseVO<Boolean>(Status.SUCCESS, "update ok", update)
-                : new ResponseVO<Boolean>(Status.ERROR, "update error", update);
+    ResponseVO<Boolean> updateArticle(@RequestBody RequestVO<Question> questionRequestVO) {
+        boolean updateArticle = questionService.updateById(questionRequestVO.getData());
+        Boolean setHotBoolean = questionService.computeHot(questionRequestVO.getData().getId());
+        if (!setHotBoolean) {
+            return new ResponseVO<>(Status.ERROR, "update error", setHotBoolean);
+        }
+        return updateArticle
+                ? new ResponseVO<>(Status.SUCCESS, "update ok", updateArticle)
+                : new ResponseVO<>(Status.ERROR, "update error", updateArticle);
     }
 
     /**
-     * 根据id查询一个问题
+     * 通过id查询一则问题
      *
-     * @param id 问题的唯一标识
-     * @return ResponseVO<Question> 响应数据实体
+     * @param id 问题id
+     * @return Question 单篇问题
      */
     @GetMapping("/{id}")
-    ResponseVO<Question> getQuestion(@PathVariable int id) {
-        Question byId = questionService.getById(id);
-        return byId != null
-                ? new ResponseVO<>(Status.SUCCESS, "get a question", byId)
-                : new ResponseVO<>(Status.ERROR, "get failed", byId);
+    ResponseVO<Question> getQuestionById(@PathVariable int id) {
+        Question question = questionService.getById(id);
+        return  question != null
+                ? new ResponseVO<>(Status.SUCCESS, "get a user", question)
+                : new ResponseVO<>(Status.ERROR, "get a user", question);
     }
 
     /**
-     * 根据问题id计算该问题的权重(热度)
+     * 获取所有问题
      *
-     * @param id 问题的唯一标识
-     * @return ResponseVO<Boolean> 响应数据实体
+     * @return List<Question> 问题数组
      */
-    @GetMapping("/compute/{id}")
-    ResponseVO<Boolean> computeWeighRatio(@PathVariable int id) {
-        Boolean aBoolean = questionService.computeWeighRatio(id);
-        return aBoolean
-                ? new ResponseVO<>(Status.SUCCESS, "compute successfully", aBoolean)
-                : new ResponseVO<>(Status.ERROR, "compute weigh Ratio fail", aBoolean);
+    @GetMapping("/list")
+    ResponseVO<List<Question>> listQuestion() {
+        List<Question> list = questionService.list();
+        return list != null
+                ? new ResponseVO<>(Status.SUCCESS, "list a user", list)
+                : new ResponseVO<>(Status.ERROR, "list a user", list);
     }
 
     /**
-     * 根据时间降序返回当前库中所有的问题
+     * 获取所有问题+分页
      *
-     * @return ResponseVO<List < Question>> 响应数据实体
+     * @param page 页数
+     * @param size 数据条数
+     * @return List
      */
-    @GetMapping("/timeQuestion")
-    ResponseVO<List<Question>> returnQuestionByTimeAsc() {
-        List<Question> question = questionService.returnQuestionByTimeAsc();
-        return question != null
-                ? new ResponseVO<>(Status.SUCCESS, "Asc successfully", question)
-                : new ResponseVO<>(Status.SUCCESS, "Asc successfully", question);
+    @GetMapping("/list/page")
+    ResponseVO<List<Question>> listQuestionByPage(@RequestParam("page") int page, @RequestParam("size") int size) {
+        IPage iPage = new Page(page, size);
+        QueryWrapper<Question> questionQueryWrapper = new QueryWrapper<>();
+        IPage listPage = questionService.page(iPage, questionQueryWrapper);
+        List records = listPage.getRecords();
+        return listPage != null
+                ? new ResponseVO<List<Question>>(Status.SUCCESS, "list articles", records)
+                : new ResponseVO<List<Question>>(Status.ERROR, "list articles", records);
     }
 
     /**
-     * 根据当天发布的问题的权重返回降序后的所有问题
+     * 获取精选问题+分页
+     * 通过hot排序所有文章
      *
-     * @param time 当天的时间
-     * @return ResponseVO<List < Question>> 响应数据实体
+     * @param page 页数
+     * @param size 数据条数
+     * @return List<Article> 文章数组
      */
-    @GetMapping("/hotQuestion/{time}")
-    ResponseVO<List<Question>> returnQuestionToWebByWeighRatio(@PathVariable String time) {
-        List<Question> questions = questionService.returnQuestionToWebByWeighRatio(questionService.timeFormat(time));
-        return questions != null
-                ? new ResponseVO<>(Status.SUCCESS, "desc successfully", questions)
-                : new ResponseVO<>(Status.ERROR, "desc error", questions);
+    @GetMapping("/list/feature")
+    ResponseVO<List<Question>> listFeatureQuestionByPage(@RequestParam("page") int page, @RequestParam("size") int size) {
+        IPage iPage = new Page(page, size);
+        QueryWrapper<Question> queryWrapper = new QueryWrapper<>();
+        queryWrapper.orderByDesc("hot");
+        IPage featurePage = questionService.page(iPage, queryWrapper);
+        List records = featurePage.getRecords();
+        return records != null
+                ? new ResponseVO<List<Question>>(Status.SUCCESS, "list a user", records)
+                : new ResponseVO<List<Question>>(Status.ERROR, "list a user", records);
     }
 
+    /**
+     * 获取最新文章+分页
+     * 通过hot排序所有文章
+     *
+     * @param page 页数
+     * @param size 数据条数
+     * @return List<Article> 文章数组
+     */
+    @GetMapping("/list/latest")
+    ResponseVO<List<Question>> listLatestQuestionByPage(@RequestParam("page") int page, @RequestParam("size") int size) {
+        IPage iPage = new Page(page, size);
+        QueryWrapper<Question> queryQueryWrapper = new QueryWrapper<>();
+        queryQueryWrapper.orderByDesc("publish_date");
+        IPage latestPage = questionService.page(iPage, queryQueryWrapper);
+        List records = latestPage.getRecords();
+        return records != null
+                ? new ResponseVO<List<Question>>(Status.SUCCESS, "list a user", records)
+                : new ResponseVO<List<Question>>(Status.ERROR, "list a user", records);
+    }
+
+    /**
+     * 获取当天根据问题排序后的所有文章+分页
+     *
+     * @param date 日期
+     * @param page 页数
+     * @param size 数据条数
+     * @return List<Question> 文章数组
+     */
+    @GetMapping("/list/hot/{date}")
+    ResponseVO<List<Question>> listHotQuestionByPage(@PathVariable String date, @RequestParam("page") int page,
+                                                   @RequestParam("size") int size) {
+        IPage iPage = new Page(page, size);
+        QueryWrapper<Question> questionQueryWrapper = new QueryWrapper<>();
+        questionQueryWrapper.orderByDesc("hot");
+        questionQueryWrapper.like("publish_date", date + "%");
+        IPage hotPage = questionService.page(iPage, questionQueryWrapper);
+        List records = hotPage.getRecords();
+        return records != null
+                ? new ResponseVO<List<Question>>(Status.SUCCESS, "list a user", records)
+                : new ResponseVO<List<Question>>(Status.ERROR, "list a user", records);
+    }
 }

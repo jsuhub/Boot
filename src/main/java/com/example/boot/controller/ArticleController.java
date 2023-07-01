@@ -117,26 +117,8 @@ public class ArticleController {
     }
 
     /**
-     * 获取按照发布时间降序排序后的所有文章+分页
-     *
-     * @param page 页数
-     * @param size 数据条数
-     * @return List<Article> 文章数组
-     */
-    @GetMapping("/list/latest")
-    ResponseVO<List<Article>> listArticleForLatest(@RequestParam("page") int page, @RequestParam("size") int size) {
-        IPage iPage = new Page(page, size);
-        QueryWrapper<Article> articleQueryWrapper = new QueryWrapper<>();
-        articleQueryWrapper.orderByDesc("publish_date");
-        IPage latestPage = articleService.page(iPage, articleQueryWrapper);
-        List records = latestPage.getRecords();
-        return records != null
-                ? new ResponseVO<List<Article>>(Status.SUCCESS, "list a user", records)
-                : new ResponseVO<List<Article>>(Status.ERROR, "list a user", records);
-    }
-
-    /**
-     * 获取根据热度排序后的所有文章+分页
+     * 获取精选文章+分页
+     * 通过hot排序所有文章
      *
      * @param page 页数
      * @param size 数据条数
@@ -149,6 +131,26 @@ public class ArticleController {
         articleQueryWrapper.orderByDesc("hot");
         IPage featurePage = articleService.page(iPage, articleQueryWrapper);
         List records = featurePage.getRecords();
+        return records != null
+                ? new ResponseVO<List<Article>>(Status.SUCCESS, "list a user", records)
+                : new ResponseVO<List<Article>>(Status.ERROR, "list a user", records);
+    }
+
+    /**
+     * 获取最新文章+分页
+     * 通过hot排序所有文章
+     *
+     * @param page 页数
+     * @param size 数据条数
+     * @return List<Article> 文章数组
+     */
+    @GetMapping("/list/latest")
+    ResponseVO<List<Article>> listArticleForLatest(@RequestParam("page") int page, @RequestParam("size") int size) {
+        IPage iPage = new Page(page, size);
+        QueryWrapper<Article> articleQueryWrapper = new QueryWrapper<>();
+        articleQueryWrapper.orderByDesc("publish_date");
+        IPage latestPage = articleService.page(iPage, articleQueryWrapper);
+        List records = latestPage.getRecords();
         return records != null
                 ? new ResponseVO<List<Article>>(Status.SUCCESS, "list a user", records)
                 : new ResponseVO<List<Article>>(Status.ERROR, "list a user", records);
@@ -199,13 +201,64 @@ public class ArticleController {
                 : new ResponseVO<>(Status.SUCCESS, "Asc successfully", records);
     }
 
-    @GetMapping("/list/tag/latest")
-    ResponseVO<List<Article>> listArticleByTagAndLatest(@PathVariable String tag, @RequestParam("page") int page,
+    /**
+     * 根据标签获取精选文章+分页
+     *
+     * @param page
+     * @param size
+     * @return
+     */
+    @GetMapping("/list/{tag}/feature")
+    ResponseVO<List<Article>> listFeatureArticleByTag(@PathVariable String tag,@RequestParam("page") int page,
+                                                     @RequestParam("size") int size) {
+        IPage iPage = new Page(page, size);
+        QueryWrapper<Article> articleQueryWrapper = new QueryWrapper<>();
+        articleQueryWrapper.eq("tag", tag);
+        articleQueryWrapper.orderByDesc("hot");
+        IPage<Article> tagPage = articleService.page(iPage, articleQueryWrapper);
+        List<Article> records = tagPage.getRecords();
+        return records != null
+                ? new ResponseVO<>(Status.SUCCESS, "Asc successfully", records)
+                : new ResponseVO<>(Status.SUCCESS, "Asc successfully", records);
+    }
+
+    /**
+     * 根据标签获取最新文章+分页
+     *
+     * @param page
+     * @param size
+     * @return
+     */
+    @GetMapping("/list/{tag}/latest")
+    ResponseVO<List<Article>> listLatestArticleByTag(@PathVariable String tag, @RequestParam("page") int page,
                                                   @RequestParam("size") int size) {
         IPage iPage = new Page(page, size);
         QueryWrapper<Article> articleQueryWrapper = new QueryWrapper<>();
         articleQueryWrapper.eq("tag", tag);
         articleQueryWrapper.orderByAsc("publish_date");
+        IPage<Article> tagPage = articleService.page(iPage, articleQueryWrapper);
+        List<Article> records = tagPage.getRecords();
+        return records != null
+                ? new ResponseVO<>(Status.SUCCESS, "Asc successfully", records)
+                : new ResponseVO<>(Status.SUCCESS, "Asc successfully", records);
+    }
+
+    /**
+     * 根据标签获取热门文章+分页
+     *
+     * @param page
+     * @param size
+     * @return
+     */
+    @GetMapping("/list/{tag}/hot/{date}")
+    ResponseVO<List<Article>> listArticleByTagAndHot(@PathVariable String tag, @PathVariable String date,
+                                                     @RequestParam("page") int page,
+                                                        @RequestParam("size") int size) {
+        IPage iPage = new Page(page, size);
+        QueryWrapper<Article> articleQueryWrapper = new QueryWrapper<>();
+        articleQueryWrapper.eq("tag", tag);
+        articleQueryWrapper.like("publish_date", date+"%");
+        articleQueryWrapper.orderByDesc("hot");
         IPage<Article> tagPage = articleService.page(iPage, articleQueryWrapper);
         List<Article> records = tagPage.getRecords();
         return records != null
